@@ -1,0 +1,38 @@
+<div class="flex flex-col items-center justify-center h-screen">
+  <div class="lg:w-100 md:w-80">
+    <form
+      appearance="floating"
+      tuiCardLarge
+      tuiForm="m"
+      [formGroup]="loginForm"
+      (ngSubmit)="login()"
+    >
+      <header tuiHeader>
+        <h2 tuiTitle>Log into TidyBalance</h2>
+      </header>
+
+      <tui-textfield>
+        <label tuiLabel>Username</label>
+        <input formControlName="username" tuiInput />
+      </tui-textfield>
+
+      <tui-textfield>
+        <label tuiLabel>Password</label>
+        <input formControlName="password" tuiInput type="password" />
+        <tui-icon tuiPassword />
+      </tui-textfield>
+
+      @if (loginForm.hasError('invalidCredentials')) {
+        <div tuiError style="color: var(--tui-text-negative)">Incorrect username or password.</div>
+      }
+
+      <footer>
+        <button appearance="primary" tuiButton type="submit" class="w-full!">Log in</button>
+      </footer>
+
+      <button appearance="secondary" tuiButton type="button" class="w-full!">
+        Create new account
+      </button>
+    </form>
+  </div>
+</div>

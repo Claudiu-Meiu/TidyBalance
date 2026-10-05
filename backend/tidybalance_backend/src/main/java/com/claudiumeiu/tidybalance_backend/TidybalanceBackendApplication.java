@@ -9,5 +9,4 @@ public class TidybalanceBackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TidybalanceBackendApplication.class, args);
 	}
-
 }
