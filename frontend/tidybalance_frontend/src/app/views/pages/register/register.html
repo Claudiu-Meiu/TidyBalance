@@ -1,0 +1,54 @@
+<div class="flex flex-col items-center justify-center h-screen">
+  <div class="lg:w-100 md:w-80">
+    <form
+      appearance="floating"
+      tuiCardLarge
+      tuiForm="m"
+      [formGroup]="registerForm"
+      (ngSubmit)="register()"
+    >
+      <header tuiHeader>
+        <h2 tuiTitle>Create new account</h2>
+      </header>
+
+      <tui-textfield>
+        <label tuiLabel>Nickname</label>
+        <input formControlName="nickname" tuiInput />
+      </tui-textfield>
+      <tui-error formControlName="nickname" />
+
+      <tui-textfield>
+        <label tuiLabel>Username</label>
+        <input formControlName="username" tuiInput />
+      </tui-textfield>
+      <tui-error formControlName="username" />
+
+      <tui-textfield>
+        <label tuiLabel>Password</label>
+        <input formControlName="password" tuiInput type="password" />
+        <tui-icon tuiPassword />
+      </tui-textfield>
+      <tui-error formControlName="password" />
+
+      @if (registerForm.hasError(registerFormSubmitErrors.serverUnavailable)) {
+        <div tuiError style="color: var(--tui-text-negative)">
+          Unable to connect to the server. Please try again later.
+        </div>
+      }
+
+      <footer>
+        <button appearance="primary" tuiButton type="submit" class="w-full!">Submit</button>
+      </footer>
+
+      <button
+        (click)="backToLoginBtn()"
+        appearance="secondary"
+        tuiButton
+        type="button"
+        class="w-full!"
+      >
+        I already have an account
+      </button>
+    </form>
+  </div>
+</div>

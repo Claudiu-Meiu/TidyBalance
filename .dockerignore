@@ -5,10 +5,10 @@
 .env.*
 !.env.example
 
-backend/tidy_balance_backend/target
-frontend/tidy_balance_frontend/node_modules
-frontend/tidy_balance_frontend/dist
-frontend/tidy_balance_frontend/build
+**/target
+**/node_modules
+**/dist
+**/.angular
 
 *.log
 .DS_Store

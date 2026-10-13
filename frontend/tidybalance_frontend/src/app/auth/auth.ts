@@ -8,6 +8,12 @@ interface LoginRequest {
   password: string;
 }
 
+interface RegisterRequest {
+  nickname: string;
+  username: string;
+  password: string;
+}
+
 @Service()
 export class Auth {
   private http = inject(HttpClient);
@@ -15,7 +21,13 @@ export class Auth {
   private readonly currentUser = signal<CurrentUser | null>(null);
   readonly user = this.currentUser.asReadonly();
 
-  apiUrl = 'http://localhost:8080';
+  apiUrl = '/api/users';
+
+  me(): Observable<CurrentUser> {
+    return this.http
+      .get<CurrentUser>(`${this.apiUrl}/me`)
+      .pipe(tap((user) => this.currentUser.set(user)));
+  }
 
   login(credentials: LoginRequest): Observable<void> {
     const body = new HttpParams()
@@ -29,9 +41,7 @@ export class Auth {
     });
   }
 
-  me(): Observable<CurrentUser> {
-    return this.http
-      .get<CurrentUser>(`${this.apiUrl}/users/me`)
-      .pipe(tap((user) => this.currentUser.set(user)));
+  register(registerDetails: RegisterRequest): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/register`, registerDetails);
   }
 }

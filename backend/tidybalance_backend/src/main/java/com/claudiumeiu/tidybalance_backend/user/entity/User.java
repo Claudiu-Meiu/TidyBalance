@@ -18,13 +18,13 @@ public class User {
     private @Nullable Long id;
 
     @Column(unique = true, nullable = false)
+    private String nickname;
+
+    @Column(unique = true, nullable = false)
     private String username;
 
     @Column(nullable = false)
     private String password;
-
-    @Column(nullable = false)
-    private String displayedName;
 
     // Getters and setters
 
@@ -34,6 +34,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getUsername() {
@@ -50,14 +58,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getDisplayedName() {
-        return displayedName;
-    }
-
-    public void setDisplayedName(String displayedName) {
-        this.displayedName = displayedName;
     }
 
 }

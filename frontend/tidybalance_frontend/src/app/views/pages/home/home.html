@@ -1,0 +1,7 @@
+<p>Home</p>
+@if (userState.user(); as user) {
+  <div>
+    <p>{{ user.nickname }}</p>
+    <p>{{ user.username }}</p>
+  </div>
+}

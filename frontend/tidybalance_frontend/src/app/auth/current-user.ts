@@ -1,3 +1,4 @@
 export interface CurrentUser {
-  displayedName: string;
+  nickname: string;
+  username: string;
 }

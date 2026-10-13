@@ -1,3 +1,44 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+
+:root {
+  --my-accent-color: #000000;
+  --my-accent-color-hover: #333333;
+  --my-accent-color-pressed: #555555;
+  --tui-text-primary-on-accent-1: #ffffff;
+  --tui-text-primary-on-accent-2: #ffffff;
+}
+
+[tuiTheme="dark"] {
+  --my-accent-color: #ffffff;
+  --my-accent-color-hover: #e5e5e5;
+  --my-accent-color-pressed: #b8b8b8;
+  --tui-text-primary-on-accent-1: #000000;
+  --tui-text-primary-on-accent-2: #000000;
+}
+
+:root,
+[tuiTheme="dark"] {
+  --tui-background-accent-1: var(--my-accent-color);
+  --tui-background-accent-1-hover: var(--my-accent-color-hover);
+  --tui-background-accent-1-pressed: var(--my-accent-color-pressed);
+
+  --tui-text-action: var(--my-accent-color);
+  --tui-text-action-hover: var(--my-accent-color-hover);
+  --tui-text-action-pressed: var(--my-accent-color-pressed);
+}
+
+button[tuiButton][appearance="secondary"],
+button[tuiButton][appearance="outline"],
+button[tuiButton][appearance="flat"] {
+  color: var(--my-accent-color);
+}
+
+tui-hint {
+  background: #333333 !important;
+  color: var(--my-accent-color)
+}
+
+[tuiTheme="dark"] tui-hint {
+  background: #666666 !important;
+  color: var(--my-accent-color)
+}

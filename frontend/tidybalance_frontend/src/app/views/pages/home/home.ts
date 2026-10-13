@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { UserState } from '../auth/user-state';
+import { UserState } from '../../../auth/user-state';
 
 @Component({
   imports: [],

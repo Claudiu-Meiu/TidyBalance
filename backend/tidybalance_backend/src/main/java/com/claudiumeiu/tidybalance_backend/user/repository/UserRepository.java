@@ -9,4 +9,8 @@ import com.claudiumeiu.tidybalance_backend.user.entity.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);
+
+    boolean existsByNickname(String nickname);
+
+    boolean existsByUsername(String username);
 }
