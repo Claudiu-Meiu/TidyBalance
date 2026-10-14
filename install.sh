@@ -34,6 +34,6 @@ cp .env.prod.template .env
 sed -i "s/^MYSQL_PASSWORD=$/MYSQL_PASSWORD=$MYSQL_PASSWORD/" .env
 sed -i "s/^MYSQL_ROOT_PASSWORD=$/MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD/" .env
 
-chmod 600 .env
+chmod 644 .env
 
 echo "Production environment initialized."
