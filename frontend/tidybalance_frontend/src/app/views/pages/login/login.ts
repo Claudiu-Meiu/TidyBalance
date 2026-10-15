@@ -96,7 +96,7 @@ export class Login {
             this.loginForm.setErrors({
               [this.loginFormSubmitErrors.invalidCredentials]: true,
             });
-          } else if (error.status === 0) {
+          } else if (error.status === 0 || error.status === HttpStatusCode.BadGateway) {
             this.loginForm.setErrors({
               [this.loginFormSubmitErrors.serverUnavailable]: true,
             });

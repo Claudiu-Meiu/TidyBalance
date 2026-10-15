@@ -166,7 +166,7 @@ export class Register {
                 });
                 break;
             }
-          } else if (error.status === 0) {
+          } else if (error.status === 0 || error.status === HttpStatusCode.BadGateway) {
             this.registerForm.setErrors({
               [this.registerFormSubmitErrors.serverUnavailable]: true,
             });
