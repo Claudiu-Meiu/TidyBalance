@@ -34,7 +34,15 @@
       }
 
       <footer>
-        <button appearance="primary" tuiButton type="submit" class="w-full!">Log in</button>
+        <button
+          appearance="primary"
+          tuiButton
+          type="submit"
+          class="w-full!"
+          [loading]="isSubmitting"
+        >
+          Log in
+        </button>
       </footer>
 
       <button

@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { finalize } from 'rxjs';
 import {
   FormControl,
   FormGroup,
@@ -15,7 +16,7 @@ import {
   TuiIcon,
   TUI_VALIDATION_ERRORS,
 } from '@taiga-ui/core';
-import { TuiPassword } from '@taiga-ui/kit';
+import { TuiPassword, TuiButtonLoading } from '@taiga-ui/kit';
 import { TuiCardLarge, TuiForm, TuiHeader } from '@taiga-ui/layout';
 import { Auth } from '../../../auth/auth';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
@@ -36,6 +37,7 @@ enum LoginFormSubmitErrors {
     TuiHeader,
     TuiTitle,
     TuiPassword,
+    TuiButtonLoading,
     TuiIcon,
     FormsModule,
   ],
@@ -55,7 +57,7 @@ export class Login {
   private authService = inject(Auth);
   private router = inject(Router);
 
-  readonly loginFormSubmitErrors = LoginFormSubmitErrors
+  readonly loginFormSubmitErrors = LoginFormSubmitErrors;
 
   protected readonly loginForm = new FormGroup({
     username: new FormControl('', {
@@ -69,19 +71,22 @@ export class Login {
     }),
   });
 
+  isSubmitting = false;
+
   login() {
-    if (this.loginForm.invalid) {
+    if (this.loginForm.invalid || this.isSubmitting) {
       this.loginForm.markAllAsTouched();
       return;
     }
 
-    this.loginForm.setErrors(null);
+    this.isSubmitting = true;
 
     this.authService
       .login({
         username: this.loginForm.controls.username.value,
         password: this.loginForm.controls.password.value,
       })
+      .pipe(finalize(() => (this.isSubmitting = false)))
       .subscribe({
         next: () => {
           this.router.navigate(['/home']);

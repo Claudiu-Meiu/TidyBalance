@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { finalize } from 'rxjs';
 import { Auth } from '../../../auth/auth';
 import { Router } from '@angular/router';
 import {
@@ -17,7 +18,7 @@ import {
   TuiIcon,
   TUI_VALIDATION_ERRORS,
 } from '@taiga-ui/core';
-import { TuiPassword } from '@taiga-ui/kit';
+import { TuiPassword, TuiButtonLoading } from '@taiga-ui/kit';
 import { TuiCardLarge, TuiForm, TuiHeader } from '@taiga-ui/layout';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 
@@ -66,6 +67,7 @@ function passwordPatternValidator(control: AbstractControl): ValidationErrors | 
     TuiTitle,
     TuiIcon,
     TuiPassword,
+    TuiButtonLoading,
     TuiCardLarge,
     TuiForm,
     TuiHeader,
@@ -127,11 +129,15 @@ export class Register {
     }),
   });
 
+  isSubmitting = false;
+
   register() {
-    if (this.registerForm.invalid) {
+    if (this.registerForm.invalid || this.isSubmitting) {
       this.registerForm.markAllAsTouched();
       return;
     }
+
+    this.isSubmitting = true;
 
     this.authService
       .register({
@@ -139,6 +145,7 @@ export class Register {
         username: this.registerForm.value.username!,
         password: this.registerForm.value.password!,
       })
+      .pipe(finalize(() => (this.isSubmitting = false)))
       .subscribe({
         next: () => {
           this.router.navigate(['/login']);
