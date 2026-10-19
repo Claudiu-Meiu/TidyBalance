@@ -24,6 +24,11 @@
       </tui-textfield>
       <tui-error formControlName="password" />
 
+      <div class="flex items-center gap-2">
+        <input formControlName="rememberMe" tuiCheckbox type="checkbox" id="rememberMe" />
+        <label tuiLabel for="rememberMe" class="cursor-pointer">Remember me</label>
+      </div>
+
       @if (loginForm.hasError(loginFormSubmitErrors.invalidCredentials)) {
         <div tuiError style="color: var(--tui-text-negative)">Incorrect username or password.</div>
       }

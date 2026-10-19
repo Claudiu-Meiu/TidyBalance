@@ -6,6 +6,7 @@ import { CurrentUser } from './current-user';
 interface LoginRequest {
   username: string;
   password: string;
+  rememberMe: boolean;
 }
 
 interface RegisterRequest {
@@ -29,10 +30,11 @@ export class Auth {
       .pipe(tap((user) => this.currentUser.set(user)));
   }
 
-  login(credentials: LoginRequest): Observable<void> {
+  login(request: LoginRequest): Observable<void> {
     const body = new HttpParams()
-      .set('username', credentials.username)
-      .set('password', credentials.password);
+      .set('username', request.username)
+      .set('password', request.password)
+      .set('remember-me', request.rememberMe.toString());
 
     return this.http.post<void>(`${this.apiUrl}/authenticate`, body, {
       headers: {
@@ -41,7 +43,7 @@ export class Auth {
     });
   }
 
-  register(registerDetails: RegisterRequest): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/register`, registerDetails);
+  register(request: RegisterRequest): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/register`, request);
   }
 }

@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import {
   TuiButton,
   TuiInput,
+  TuiCheckbox,
   TuiError,
   TuiTitle,
   TuiIcon,
@@ -31,6 +32,7 @@ enum LoginFormSubmitErrors {
     ReactiveFormsModule,
     TuiButton,
     TuiInput,
+    TuiCheckbox,
     TuiError,
     TuiForm,
     TuiCardLarge,
@@ -69,6 +71,8 @@ export class Login {
       validators: [Validators.required],
       nonNullable: true,
     }),
+
+    rememberMe: new FormControl<boolean>(true, { nonNullable: true }),
   });
 
   isSubmitting = false;
@@ -85,6 +89,7 @@ export class Login {
       .login({
         username: this.loginForm.controls.username.value,
         password: this.loginForm.controls.password.value,
+        rememberMe: this.loginForm.controls.rememberMe.value,
       })
       .pipe(finalize(() => (this.isSubmitting = false)))
       .subscribe({
