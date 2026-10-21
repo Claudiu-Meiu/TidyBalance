@@ -7,36 +7,51 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.claudiumeiu.tidybalance_backend.user.exception.NicknameAlreadyExistsException;
+import com.claudiumeiu.tidybalance_backend.user.exception.PublicUserProfileNotFoundException;
 import com.claudiumeiu.tidybalance_backend.user.exception.UsernameAlreadyExistsException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NicknameAlreadyExistsException.class)
-    public ProblemDetail handleNicknameAlreadyExists(
-            NicknameAlreadyExistsException exception) {
+        @ExceptionHandler(NicknameAlreadyExistsException.class)
+        public ProblemDetail handleNicknameAlreadyExists(
+                        NicknameAlreadyExistsException exception) {
 
-        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
-                HttpStatus.CONFLICT,
-                exception.getMessage());
+                ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                                HttpStatus.CONFLICT,
+                                exception.getMessage());
 
-        problem.setTitle("Conflict");
-        problem.setProperty("code", "NICKNAME_TAKEN");
+                problem.setTitle("Conflict");
+                problem.setProperty("code", "NICKNAME_TAKEN");
 
-        return problem;
-    }
+                return problem;
+        }
 
-    @ExceptionHandler(UsernameAlreadyExistsException.class)
-    public ProblemDetail handleUsernameAlreadyExists(
-            UsernameAlreadyExistsException exception) {
+        @ExceptionHandler(UsernameAlreadyExistsException.class)
+        public ProblemDetail handleUsernameAlreadyExists(
+                        UsernameAlreadyExistsException exception) {
 
-        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
-                HttpStatus.CONFLICT,
-                exception.getMessage());
+                ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                                HttpStatus.CONFLICT,
+                                exception.getMessage());
 
-        problem.setTitle("Conflict");
-        problem.setProperty("code", "USERNAME_TAKEN");
+                problem.setTitle("Conflict");
+                problem.setProperty("code", "USERNAME_TAKEN");
 
-        return problem;
-    }
+                return problem;
+        }
+
+        @ExceptionHandler(PublicUserProfileNotFoundException.class)
+        public ProblemDetail handlePublicUserProfileNotFound(
+                        PublicUserProfileNotFoundException exception) {
+
+                ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                                HttpStatus.NOT_FOUND,
+                                exception.getMessage());
+
+                problem.setTitle("Not found");
+                problem.setProperty("code", "USER_ID_NOT_FOUND");
+
+                return problem;
+        }
 }

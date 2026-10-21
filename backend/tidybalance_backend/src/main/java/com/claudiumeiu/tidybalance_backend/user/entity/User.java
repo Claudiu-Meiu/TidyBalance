@@ -1,6 +1,6 @@
 package com.claudiumeiu.tidybalance_backend.user.entity;
 
-import org.jspecify.annotations.Nullable;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,7 +15,10 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private @Nullable Long id;
+    private Long id;
+
+    @Column(unique = true, nullable = false, updatable = false)
+    private UUID publicUserId;
 
     @Column(unique = true, nullable = false)
     private String nickname;
@@ -34,6 +37,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getPublicUserId() {
+        return publicUserId;
+    }
+
+    public void setPublicUserId(UUID publicUserId) {
+        this.publicUserId = publicUserId;
     }
 
     public String getNickname() {
