@@ -1,33 +1,26 @@
 package com.claudiumeiu.tidybalance_backend.user.controller;
 
-import java.util.List;
-import java.util.UUID;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.claudiumeiu.tidybalance_backend.user.dto.CreateUserRequestDto;
 import com.claudiumeiu.tidybalance_backend.user.dto.CurrentUserAuthenticatedDto;
-import com.claudiumeiu.tidybalance_backend.user.dto.PublicUserProfileDto;
-import com.claudiumeiu.tidybalance_backend.user.dto.PublicUserProfileSearchResultDto;
-import com.claudiumeiu.tidybalance_backend.user.service.UserService;
+import com.claudiumeiu.tidybalance_backend.user.service.UserAuthService;
 
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users")
-public class UserController {
+public class UserAuthController {
 
-    private final UserService userService;
+    private final UserAuthService userService;
 
-    public UserController(UserService userService) {
+    public UserAuthController(UserAuthService userService) {
         this.userService = userService;
     }
 
@@ -43,17 +36,5 @@ public class UserController {
         userService.createUser(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @GetMapping("/{publicUserId}")
-    public PublicUserProfileDto getPublicUserProfile(
-            @PathVariable UUID publicUserId) {
-        return userService.getPublicUserProfile(publicUserId);
-    }
-
-    @GetMapping("/search")
-    public List<PublicUserProfileSearchResultDto> searchUsers(
-            @RequestParam("q") String query) {
-        return userService.searchUsers(query);
     }
 }
