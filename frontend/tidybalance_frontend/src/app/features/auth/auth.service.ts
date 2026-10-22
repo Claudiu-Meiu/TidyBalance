@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Service, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { CurrentUser } from './current-user';
+import { CurrentUser } from './current-user.model';
 
 interface LoginRequest {
   username: string;
@@ -16,7 +16,7 @@ interface RegisterRequest {
 }
 
 @Service()
-export class Auth {
+export class AuthService {
   private http = inject(HttpClient);
 
   private readonly currentUser = signal<CurrentUser | null>(null);

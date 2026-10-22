@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { finalize } from 'rxjs';
-import { Auth } from '../../../auth/auth';
+import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import {
   ReactiveFormsModule,
@@ -91,7 +91,7 @@ function passwordPatternValidator(control: AbstractControl): ValidationErrors | 
   ],
 })
 export class Register {
-  private authService = inject(Auth);
+  private authService = inject(AuthService);
   private router = inject(Router);
 
   readonly registerApiErrorCodes = RegisterErrorCode;

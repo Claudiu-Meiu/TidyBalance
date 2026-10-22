@@ -19,7 +19,7 @@ import {
 } from '@taiga-ui/core';
 import { TuiPassword, TuiButtonLoading } from '@taiga-ui/kit';
 import { TuiCardLarge, TuiForm, TuiHeader } from '@taiga-ui/layout';
-import { Auth } from '../../../auth/auth';
+import { AuthService } from '../auth.service';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 
 enum LoginFormSubmitErrors {
@@ -56,7 +56,7 @@ enum LoginFormSubmitErrors {
   ],
 })
 export class Login {
-  private authService = inject(Auth);
+  private authService = inject(AuthService);
   private router = inject(Router);
 
   readonly loginFormSubmitErrors = LoginFormSubmitErrors;

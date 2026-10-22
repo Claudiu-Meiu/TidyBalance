@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { UserState } from '../../../auth/user-state';
+import { UserStateService } from '../auth/user-state.service';
 
 @Component({
   imports: [],
@@ -8,5 +8,5 @@ import { UserState } from '../../../auth/user-state';
   templateUrl: './home.html',
 })
 export class Home {
-  userState = inject(UserState);
+  userState = inject(UserStateService);
 }

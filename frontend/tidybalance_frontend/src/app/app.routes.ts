@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
 
-import { Login } from './views/pages/login/login';
-import { Home } from './views/pages/home/home';
-import { Register } from './views/pages/register/register';
-import { authGuard } from './auth/auth-guard';
-import { MainLayout } from './views/layouts/main-layout/main-layout';
-import { PageNotFound } from './views/pages/page-not-found/page-not-found';
+import { Login } from './features/auth/login/login';
+import { Home } from './features/home/home';
+import { Register } from './features/auth/register/register';
+import { authGuard } from './features/auth/auth.guard';
+import { MainLayout } from './layouts/main-layout/main-layout';
+import { PageNotFound } from './features/page-not-found/page-not-found';
 
 export const routes: Routes = [
   {
