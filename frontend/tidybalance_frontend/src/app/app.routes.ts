@@ -6,6 +6,8 @@ import { Register } from './features/auth/register/register';
 import { authGuard } from './features/auth/auth.guard';
 import { MainLayout } from './layouts/main-layout/main-layout';
 import { PageNotFound } from './features/page-not-found/page-not-found';
+import { PublicUserProfile } from './features/public-user-profile/public-user-profile';
+import { publicUserProfileResolver } from './features/public-user-profile/public-user-profile.resolver';
 
 export const routes: Routes = [
   {
@@ -16,6 +18,13 @@ export const routes: Routes = [
         path: '',
         pathMatch: 'full',
         redirectTo: 'home',
+      },
+      {
+        path: 'user/profile/:publicUserId',
+        component: PublicUserProfile,
+        resolve: {
+          publicUserProfile: publicUserProfileResolver,
+        },
       },
       {
         path: 'home',
