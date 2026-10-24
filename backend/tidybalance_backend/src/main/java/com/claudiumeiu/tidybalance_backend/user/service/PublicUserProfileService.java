@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.claudiumeiu.tidybalance_backend.user.dto.PublicUserProfileDto;
 import com.claudiumeiu.tidybalance_backend.user.dto.PublicUserProfileSearchResultDto;
-import com.claudiumeiu.tidybalance_backend.user.entity.User;
+import com.claudiumeiu.tidybalance_backend.user.entity.UserEntity;
 import com.claudiumeiu.tidybalance_backend.user.exception.PublicUserProfileNotFoundException;
 import com.claudiumeiu.tidybalance_backend.user.repository.UserRepository;
 
@@ -21,7 +21,7 @@ public class PublicUserProfileService {
     }
 
     public PublicUserProfileDto getPublicUserProfile(UUID publicUserId) {
-        User user = userRepository.findByPublicUserId(publicUserId)
+        UserEntity user = userRepository.findByPublicUserId(publicUserId)
                 .orElseThrow(() -> new PublicUserProfileNotFoundException());
 
         return new PublicUserProfileDto(user.getPublicUserId(), user.getNickname());

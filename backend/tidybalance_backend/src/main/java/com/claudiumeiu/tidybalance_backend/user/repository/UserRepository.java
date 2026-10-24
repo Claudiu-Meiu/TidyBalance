@@ -6,15 +6,15 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.claudiumeiu.tidybalance_backend.user.entity.User;
+import com.claudiumeiu.tidybalance_backend.user.entity.UserEntity;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    Optional<User> findByUsername(String username);
+    Optional<UserEntity> findByUsername(String username);
 
-    Optional<User> findByPublicUserId(UUID publicUserId);
+    Optional<UserEntity> findByPublicUserId(UUID publicUserId);
 
-    List<User> findByNicknameContainingIgnoreCase(String nickname);
+    List<UserEntity> findByNicknameContainingIgnoreCase(String nickname);
 
     boolean existsByNickname(String nickname);
 

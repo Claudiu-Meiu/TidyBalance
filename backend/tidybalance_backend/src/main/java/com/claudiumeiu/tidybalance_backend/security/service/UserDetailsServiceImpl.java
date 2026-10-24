@@ -1,11 +1,12 @@
 package com.claudiumeiu.tidybalance_backend.security.service;
 
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.claudiumeiu.tidybalance_backend.user.entity.User;
+import com.claudiumeiu.tidybalance_backend.user.entity.UserEntity;
 import com.claudiumeiu.tidybalance_backend.user.repository.UserRepository;
 
 @Service
@@ -21,11 +22,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
 
-        User user = userRepository.findByUsername(username)
+        UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "User not found: " + username));
 
-        return org.springframework.security.core.userdetails.User
+        return User
                 .withUsername(user.getUsername())
                 .password(user.getPassword())
                 .build();

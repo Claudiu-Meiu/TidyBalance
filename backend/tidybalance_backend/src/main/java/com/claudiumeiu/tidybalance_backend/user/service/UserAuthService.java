@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.claudiumeiu.tidybalance_backend.user.dto.CreateUserRequestDto;
 import com.claudiumeiu.tidybalance_backend.user.dto.CurrentUserAuthenticatedDto;
-import com.claudiumeiu.tidybalance_backend.user.entity.User;
+import com.claudiumeiu.tidybalance_backend.user.entity.UserEntity;
 import com.claudiumeiu.tidybalance_backend.user.exception.NicknameAlreadyExistsException;
 
 import com.claudiumeiu.tidybalance_backend.user.exception.UsernameAlreadyExistsException;
@@ -29,7 +29,7 @@ public class UserAuthService {
     public CurrentUserAuthenticatedDto me() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        User user = userRepository.findByUsername(username)
+        UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "User not found: " + username));
 
@@ -48,7 +48,7 @@ public class UserAuthService {
             throw new UsernameAlreadyExistsException();
         }
 
-        User user = new User();
+        UserEntity user = new UserEntity();
 
         user.setPublicUserId(UUID.randomUUID());
         user.setNickname(request.nickname());
