@@ -22,6 +22,7 @@ export const routes: Routes = [
       {
         path: 'user/profile/:publicUserId',
         component: PublicUserProfile,
+        canActivate: [authGuard],
         resolve: {
           publicUserProfile: publicUserProfileResolver,
         },
