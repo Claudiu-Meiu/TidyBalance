@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Service, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { CurrentUser } from './current-user.model';
+import { AppRoutesApiEnum } from '../../app.routes-api.enum';
 
 interface LoginRequest {
   username: string;
@@ -22,11 +23,9 @@ export class AuthService {
   private readonly currentUser = signal<CurrentUser | null>(null);
   readonly user = this.currentUser.asReadonly();
 
-  apiUrl = '/api/users';
-
   me(): Observable<CurrentUser> {
     return this.http
-      .get<CurrentUser>(`${this.apiUrl}/me`)
+      .get<CurrentUser>(AppRoutesApiEnum.API_USERS_ME)
       .pipe(tap((user) => this.currentUser.set(user)));
   }
 
@@ -36,7 +35,7 @@ export class AuthService {
       .set('password', request.password)
       .set('remember-me', request.rememberMe.toString());
 
-    return this.http.post<void>(`${this.apiUrl}/authenticate`, body, {
+    return this.http.post<void>(AppRoutesApiEnum.API_USERS_AUTHENTICATE, body, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -44,6 +43,6 @@ export class AuthService {
   }
 
   register(request: RegisterRequest): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/register`, request);
+    return this.http.post<void>(AppRoutesApiEnum.API_USERS_REGISTER, request);
   }
 }

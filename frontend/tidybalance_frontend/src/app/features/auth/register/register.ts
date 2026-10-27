@@ -21,6 +21,7 @@ import {
 import { TuiPassword, TuiButtonLoading } from '@taiga-ui/kit';
 import { TuiCardLarge, TuiForm, TuiHeader } from '@taiga-ui/layout';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { AppRoutesPagesEnum } from '../../../app.routes-pages.enum';
 
 enum RegisterErrorCode {
   NICKNAME_TAKEN = 'NICKNAME_TAKEN',
@@ -148,7 +149,7 @@ export class Register {
       .pipe(finalize(() => (this.isSubmitting = false)))
       .subscribe({
         next: () => {
-          this.router.navigate(['/login']);
+          this.router.navigate([AppRoutesPagesEnum.PAGE_LOGIN]);
         },
 
         error: (error: HttpErrorResponse) => {
@@ -176,6 +177,6 @@ export class Register {
   }
 
   backToLoginBtn() {
-    this.router.navigate(['/login']);
+    this.router.navigate([AppRoutesPagesEnum.PAGE_LOGIN]);
   }
 }

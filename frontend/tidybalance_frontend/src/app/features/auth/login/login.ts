@@ -21,6 +21,7 @@ import { TuiPassword, TuiButtonLoading } from '@taiga-ui/kit';
 import { TuiCardLarge, TuiForm, TuiHeader } from '@taiga-ui/layout';
 import { AuthService } from '../auth.service';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { AppRoutesPagesEnum } from '../../../app.routes-pages.enum';
 
 enum LoginFormSubmitErrors {
   invalidCredentials = 'invalidCredentials',
@@ -94,7 +95,7 @@ export class Login {
       .pipe(finalize(() => (this.isSubmitting = false)))
       .subscribe({
         next: () => {
-          this.router.navigate(['/home']);
+          this.router.navigate([AppRoutesPagesEnum.PAGE_HOME]);
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.Unauthorized) {
@@ -111,6 +112,6 @@ export class Login {
   }
 
   createNewAccountBtn() {
-    this.router.navigate(['/register']);
+    this.router.navigate([AppRoutesPagesEnum.PAGE_REGISTER]);
   }
 }

@@ -4,6 +4,7 @@ import { ActivatedRouteSnapshot, RedirectCommand, ResolveFn, Router } from '@ang
 import { PublicUserProfileModel } from './public-user-profile.model';
 import { PublicUserProfileService } from './public-user-profile.service';
 import { catchError, of } from 'rxjs';
+import { AppRoutesPagesEnum } from '../../app.routes-pages.enum';
 
 export const publicUserProfileResolver: ResolveFn<PublicUserProfileModel> = (
   route: ActivatedRouteSnapshot,
@@ -14,5 +15,7 @@ export const publicUserProfileResolver: ResolveFn<PublicUserProfileModel> = (
 
   return publicUserProfileService
     .publicUserProfile(publicUserId)
-    .pipe(catchError(() => of(new RedirectCommand(router.parseUrl('/not-found')))));
+    .pipe(
+      catchError(() => of(new RedirectCommand(router.parseUrl(AppRoutesPagesEnum.PAGE_NOT_FOUND)))),
+    );
 };

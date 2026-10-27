@@ -3,6 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from './auth.service';
 import { UserStateService } from './user-state.service';
 import { catchError, map, of, tap } from 'rxjs';
+import { AppRoutesPagesEnum } from '../../app.routes-pages.enum';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
@@ -14,7 +15,7 @@ export const authGuard: CanActivateFn = (route, state) => {
     map(() => true),
     catchError(() => {
       userState.clearUser();
-      return of(router.createUrlTree(['/login']));
+      return of(router.createUrlTree([AppRoutesPagesEnum.PAGE_LOGIN]));
     }),
   );
 };

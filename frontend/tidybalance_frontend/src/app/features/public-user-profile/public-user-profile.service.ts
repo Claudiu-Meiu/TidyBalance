@@ -3,14 +3,15 @@ import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { PublicUserProfileModel } from './public-user-profile.model';
+import { AppRoutesApiEnum } from '../../app.routes-api.enum';
 
 @Service()
 export class PublicUserProfileService {
   private http = inject(HttpClient);
 
-  private readonly apiUrl = '/api/users/profiles';
-
   publicUserProfile(publicUserId: string): Observable<PublicUserProfileModel> {
-    return this.http.get<PublicUserProfileModel>(`${this.apiUrl}/${publicUserId}`);
+    return this.http.get<PublicUserProfileModel>(
+      `${AppRoutesApiEnum.API_USERS_PROFILES}/${publicUserId}`,
+    );
   }
 }
