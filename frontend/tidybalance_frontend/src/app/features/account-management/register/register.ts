@@ -8,7 +8,7 @@ import {
   nicknamePatternValidator,
   usernamePatternValidator,
   passwordPatternValidator,
-} from '../../../app.validation-errors';
+} from '../../../app.validation-form-errors';
 
 import { TuiButton, TuiInput, TuiError, TuiTitle, TuiIcon } from '@taiga-ui/core';
 import { TuiPassword, TuiButtonLoading } from '@taiga-ui/kit';

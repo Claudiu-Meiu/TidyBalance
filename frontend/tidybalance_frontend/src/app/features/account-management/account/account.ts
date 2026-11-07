@@ -8,7 +8,7 @@ import {
   nicknamePatternValidator,
   usernamePatternValidator,
   passwordPatternValidator,
-} from '../../../app.validation-errors';
+} from '../../../app.validation-form-errors';
 
 import { UserStateService } from '../../auth/user-state.service';
 import { AccountService } from '../account.service';

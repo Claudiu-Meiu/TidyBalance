@@ -2,7 +2,7 @@ import { provideTaiga } from '@taiga-ui/core';
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { routes } from './app.routes';
-import { provideCustomGlobalFormValidationErrors } from './app.validation-errors';
+import { provideCustomGlobalFormValidationErrors } from './app.validation-form-errors';
 
 export const appConfig: ApplicationConfig = {
   providers: [
