@@ -1,22 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { finalize } from 'rxjs';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-  FormsModule,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import {
-  TuiButton,
-  TuiInput,
-  TuiCheckbox,
-  TuiError,
-  TuiTitle,
-  TuiIcon,
-  TUI_VALIDATION_ERRORS,
-} from '@taiga-ui/core';
+import { TuiButton, TuiInput, TuiCheckbox, TuiError, TuiTitle, TuiIcon } from '@taiga-ui/core';
+import { TuiAutoFocus } from '@taiga-ui/cdk';
 import { TuiPassword, TuiButtonLoading } from '@taiga-ui/kit';
 import { TuiCardLarge, TuiForm, TuiHeader } from '@taiga-ui/layout';
 import { AuthService } from '../auth.service';
@@ -42,19 +29,11 @@ enum LoginFormSubmitErrors {
     TuiPassword,
     TuiButtonLoading,
     TuiIcon,
-    FormsModule,
+    TuiAutoFocus,
   ],
   selector: 'app-login',
   styleUrl: './login.css',
   templateUrl: './login.html',
-  providers: [
-    {
-      provide: TUI_VALIDATION_ERRORS,
-      useValue: {
-        required: 'This field is required.',
-      },
-    },
-  ],
 })
 export class Login {
   private authService = inject(AuthService);

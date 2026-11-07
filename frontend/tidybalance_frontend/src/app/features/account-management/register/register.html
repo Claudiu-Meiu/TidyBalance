@@ -30,20 +30,14 @@
       </tui-textfield>
       <tui-error formControlName="password" />
 
-      @if (registerForm.hasError(registerFormSubmitErrors.serverUnavailable)) {
+      @if (registerForm.hasError(requestErrorFormInputIdentifier.serverUnavailable)) {
         <div tuiError style="color: var(--tui-text-negative)">
           Unable to connect to the server. Please try again later.
         </div>
       }
 
       <footer>
-        <button
-          appearance="primary"
-          tuiButton
-          type="submit"
-          class="w-full!"
-          [loading]="isSubmitting"
-        >
+        <button tuiButton type="submit" class="w-full!" [loading]="isRegisterFormSubmitting">
           Submit
         </button>
       </footer>

@@ -1,0 +1,272 @@
+<div class="flex flex-col gap-6 py-20 w-full max-w-4xl mx-auto px-4">
+  <h1 tuiTitle="l">Account</h1>
+
+  <!-- Change Password -->
+  <div tuiCardLarge appearance="floating">
+    <div class="flex items-center justify-between gap-4 flex-wrap">
+      <header tuiHeader>
+        <h1 tuiTitle>
+          Password
+          <span tuiSubtitle>Change your password from here.</span>
+        </h1>
+      </header>
+
+      <button
+        (click)="openChangePasswordDialogBtn()"
+        tuiButton
+        appearance="secondary"
+        type="button"
+        size="m"
+      >
+        Change password
+      </button>
+
+      <ng-template
+        [(tuiDialog)]="isChangePasswordDialogOpen"
+        [tuiDialogOptions]="{ size: 's' }"
+        let-context
+      >
+        <form [formGroup]="changePasswordForm" (ngSubmit)="changePassword()" tuiForm="m">
+          <header tuiHeader>
+            <h2 tuiTitle>Change password</h2>
+          </header>
+
+          <tui-textfield tuiTextfieldSize="m">
+            <label tuiLabel>Current password</label>
+            <input formControlName="currentPassword" tuiInput type="password" />
+            <tui-icon tuiPassword />
+          </tui-textfield>
+          <tui-error formControlName="currentPassword" />
+
+          <tui-textfield tuiTextfieldSize="m">
+            <label tuiLabel>New password</label>
+            <input formControlName="newPassword" tuiInput type="password" />
+            <tui-icon tuiPassword />
+          </tui-textfield>
+          <tui-error formControlName="newPassword" />
+
+          <tui-textfield tuiTextfieldSize="m">
+            <label tuiLabel>Retype new password</label>
+            <input formControlName="retypedNewPassword" tuiInput type="password" />
+            <tui-icon tuiPassword />
+          </tui-textfield>
+          <tui-error formControlName="retypedNewPassword" />
+
+          @if (changePasswordForm.hasError(requestErrorFormInputIdentifier.serverUnavailable)) {
+            <div tuiError style="color: var(--tui-text-negative)">
+              Unable to connect to the server. Please try again later.
+            </div>
+          }
+
+          <footer>
+            <button
+              tuiButton
+              type="submit"
+              [loading]="isChangePasswordFormSubmitting"
+              size="m"
+              class="w-full"
+            >
+              Submit
+            </button>
+          </footer>
+        </form>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Change Nickname -->
+  <div tuiCardLarge appearance="floating">
+    <header tuiHeader>
+      <h1 tuiTitle>Nickname</h1>
+    </header>
+
+    <div class="flex items-center gap-4 justify-between">
+      <p>{{ user()?.nickname }}</p>
+
+      <button
+        (click)="openChangeNicknameDialogBtn()"
+        tuiButton
+        appearance="secondary"
+        type="button"
+        size="m"
+        class="shrink-0"
+      >
+        Change
+      </button>
+
+      <ng-template
+        [(tuiDialog)]="isChangeNicknameDialogOpen"
+        [tuiDialogOptions]="{ size: 's' }"
+        let-context
+      >
+        <form [formGroup]="changeNicknameForm" (ngSubmit)="changeNickname()" tuiForm="m">
+          <header tuiHeader>
+            <h2 tuiTitle>Change nickname</h2>
+          </header>
+
+          <tui-textfield tuiTextfieldSize="m">
+            <label tuiLabel>New nickname</label>
+            <input formControlName="newNickname" tuiInput tuiAutoFocus />
+          </tui-textfield>
+          <tui-error formControlName="newNickname" />
+
+          @if (changeNicknameForm.hasError(requestErrorFormInputIdentifier.serverUnavailable)) {
+            <div tuiError style="color: var(--tui-text-negative)">
+              Unable to connect to the server. Please try again later.
+            </div>
+          }
+
+          <footer>
+            <button
+              tuiButton
+              type="submit"
+              [loading]="isChangeNicknameFormSubmitting"
+              size="m"
+              class="w-full"
+            >
+              Submit
+            </button>
+          </footer>
+        </form>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Change Username -->
+  <div tuiCardLarge appearance="floating">
+    <header tuiHeader>
+      <h1 tuiTitle>Username</h1>
+    </header>
+
+    <div class="flex items-center gap-4 justify-between">
+      <p>{{ user()?.username }}</p>
+
+      <button
+        (click)="openChangeUsernameDialogBtn()"
+        tuiButton
+        appearance="secondary"
+        type="button"
+        size="m"
+        class="shrink-0"
+      >
+        Change
+      </button>
+
+      <ng-template
+        [(tuiDialog)]="isChangeUsernameDialogOpen"
+        [tuiDialogOptions]="{ size: 's' }"
+        let-context
+      >
+        <form [formGroup]="changeUsernameForm" (ngSubmit)="changeUsername()" tuiForm="m">
+          <header tuiHeader>
+            <h2 tuiTitle>Change username</h2>
+          </header>
+
+          <tui-textfield tuiTextfieldSize="m">
+            <label tuiLabel>New username</label>
+            <input formControlName="newUsername" tuiInput tuiAutoFocus />
+          </tui-textfield>
+          <tui-error formControlName="newUsername" />
+
+          <tui-textfield tuiTextfieldSize="m">
+            <label tuiLabel>Current password</label>
+            <input formControlName="currentPassword" tuiInput type="password" />
+            <tui-icon tuiPassword />
+          </tui-textfield>
+          <tui-error formControlName="currentPassword" />
+
+          @if (changeUsernameForm.hasError(requestErrorFormInputIdentifier.serverUnavailable)) {
+            <div tuiError style="color: var(--tui-text-negative)">
+              Unable to connect to the server. Please try again later.
+            </div>
+          }
+
+          <footer>
+            <button
+              tuiButton
+              type="submit"
+              [loading]="isChangeUsernameFormSubmitting"
+              size="m"
+              class="w-full"
+            >
+              Submit
+            </button>
+          </footer>
+        </form>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Change Appearance -->
+  <div tuiCardLarge appearance="floating">
+    <div class="flex items-center justify-between gap-4 flex-wrap">
+      <header tuiHeader>
+        <h1 tuiTitle>Appearance</h1>
+      </header>
+
+      <form tuiGroup [collapsed]="true" [formGroup]="changeAppearanceForm" class="w-80">
+        <label tuiBlock="m">
+          <input formControlName="appearance" tuiRadio type="radio" size="s" value="" />
+          Auto
+        </label>
+        <label tuiBlock="m">
+          <input formControlName="appearance" tuiRadio type="radio" size="s" value="true" />
+          Dark
+        </label>
+        <label tuiBlock="m">
+          <input formControlName="appearance" tuiRadio type="radio" size="s" value="false" />
+          Light
+        </label>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Account -->
+  <div tuiCardLarge appearance="floating">
+    <div class="flex items-center justify-between gap-4 flex-wrap">
+      <header tuiHeader>
+        <h1 tuiTitle>
+          Delete your account
+          <span tuiSubtitle>Permanently delete the user {{ user()?.username }}.</span>
+        </h1>
+      </header>
+      <button
+        (click)="isDeleteAccountDialogOpen = true"
+        tuiButton
+        appearance="secondary"
+        type="button"
+        size="m"
+        class="shrink-0"
+      >
+        Delete user
+      </button>
+
+      <ng-template
+        [(tuiDialog)]="isDeleteAccountDialogOpen"
+        [tuiDialogOptions]="{ size: 's' }"
+        let-context
+      >
+        <header tuiHeader>
+          <hgroup tuiTitle>
+            <h2>Warning</h2>
+            <p>Deletion is permanent and cannot be undone.</p>
+          </hgroup>
+        </header>
+
+        <footer>
+          <button
+            (click)="deleteAccount()"
+            tuiButton
+            appearance="primary-destructive"
+            type="button"
+            [loading]="isDeleteAccountSubmitting"
+            size="m"
+            class="w-full"
+          >
+            Delete user {{ user()?.username }}
+          </button>
+        </footer>
+      </ng-template>
+    </div>
+  </div>
+</div>

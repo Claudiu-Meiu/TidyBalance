@@ -10,12 +10,6 @@ interface LoginRequest {
   rememberMe: boolean;
 }
 
-interface RegisterRequest {
-  nickname: string;
-  username: string;
-  password: string;
-}
-
 @Service()
 export class AuthService {
   private http = inject(HttpClient);
@@ -25,7 +19,7 @@ export class AuthService {
 
   me(): Observable<CurrentUser> {
     return this.http
-      .get<CurrentUser>(AppRoutesApiEnum.API_USERS_ME)
+      .get<CurrentUser>(AppRoutesApiEnum.API_USERS_ACCOUNT)
       .pipe(tap((user) => this.currentUser.set(user)));
   }
 
@@ -42,7 +36,7 @@ export class AuthService {
     });
   }
 
-  register(request: RegisterRequest): Observable<void> {
-    return this.http.post<void>(AppRoutesApiEnum.API_USERS_REGISTER, request);
+  logout(): Observable<void> {
+    return this.http.post<void>(AppRoutesApiEnum.API_USERS_LOGOUT, {});
   }
 }

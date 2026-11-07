@@ -1,5 +1,5 @@
 <p>Nickname: {{ publicUserProfile().nickname }}</p>
 
 @if (isOwnPublicProfile()) {
-  <button tuiButton type="button" size="m">Edit profile</button>
+  <button (click)="editProfileBtn()" tuiButton type="button" size="m">Edit profile</button>
 }

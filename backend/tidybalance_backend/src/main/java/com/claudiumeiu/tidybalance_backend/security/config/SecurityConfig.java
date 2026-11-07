@@ -20,7 +20,7 @@ public class SecurityConfig {
                 http
                                 .csrf(csrf -> csrf.spa())
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/api/users/authenticate", "/api/users/register")
+                                                .requestMatchers("/api/users/authenticate", "/api/users/me/register")
                                                 .permitAll()
                                                 .requestMatchers("/api/**").authenticated()
                                                 .anyRequest().permitAll())
@@ -37,7 +37,12 @@ public class SecurityConfig {
                                                 .failureHandler((request, response, exception) -> {
                                                         response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                                                 }))
-                                .rememberMe(Customizer.withDefaults());
+                                .rememberMe(Customizer.withDefaults())
+                                .logout(logout -> logout
+                                                .logoutUrl("/api/users/logout")
+                                                .deleteCookies("JSESSIONID")
+                                                .logoutSuccessHandler((request, response, authentication) -> response
+                                                                .setStatus(HttpServletResponse.SC_NO_CONTENT)));
 
                 return http.build();
         }
