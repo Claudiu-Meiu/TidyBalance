@@ -1,5 +1,10 @@
 <div class="flex flex-col gap-6 py-20 w-full max-w-4xl mx-auto px-4">
-  <h1 tuiTitle="l">Account</h1>
+  <header tuiHeader="h3">
+    <h1 tuiTitle>
+      Account
+      <span tuiSubtitle>Member since {{ user()?.accountCreatedAt | date: 'dd MMMM yyyy' }}</span>
+    </h1>
+  </header>
 
   <!-- Change Password -->
   <div tuiCardLarge appearance="floating">

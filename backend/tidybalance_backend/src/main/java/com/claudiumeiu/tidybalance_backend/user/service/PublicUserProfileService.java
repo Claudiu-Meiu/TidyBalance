@@ -24,7 +24,10 @@ public class PublicUserProfileService {
         UserEntity user = userRepository.findByPublicUserId(publicUserId)
                 .orElseThrow(() -> new PublicUserProfileNotFoundException());
 
-        return new PublicUserProfileDto(user.getPublicUserId(), user.getNickname());
+        return new PublicUserProfileDto(
+                user.getPublicUserId(),
+                user.getNickname(),
+                user.getAccountCreatedAt());
     }
 
     public List<PublicUserProfileSearchResultDto> searchPublicUserProfiles(String query) {
@@ -38,7 +41,8 @@ public class PublicUserProfileService {
                 .stream()
                 .map(user -> new PublicUserProfileSearchResultDto(
                         user.getPublicUserId(),
-                        user.getNickname()))
+                        user.getNickname(),
+                        user.getAccountCreatedAt()))
                 .toList();
     }
 }

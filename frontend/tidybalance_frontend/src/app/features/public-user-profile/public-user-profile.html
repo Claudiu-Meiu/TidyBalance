@@ -1,4 +1,5 @@
 <p>Nickname: {{ publicUserProfile().nickname }}</p>
+<p>Member since {{ publicUserProfile().accountCreatedAt | date: 'dd MMMM yyyy' }}</p>
 
 @if (isOwnPublicProfile()) {
   <button (click)="editProfileBtn()" tuiButton type="button" size="m">Edit profile</button>

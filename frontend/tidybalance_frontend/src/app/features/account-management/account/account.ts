@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { finalize } from 'rxjs';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -33,6 +34,7 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 
 @Component({
   imports: [
+    DatePipe,
     ReactiveFormsModule,
     TuiCardLarge,
     TuiHeader,

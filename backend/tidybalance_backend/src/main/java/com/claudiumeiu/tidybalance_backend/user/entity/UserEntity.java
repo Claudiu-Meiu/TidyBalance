@@ -1,5 +1,6 @@
 package com.claudiumeiu.tidybalance_backend.user.entity;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -28,6 +29,9 @@ public class UserEntity {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false, updatable = false)
+    private Instant accountCreatedAt;
 
     // Getters and setters
 
@@ -69,6 +73,14 @@ public class UserEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Instant getAccountCreatedAt() {
+        return accountCreatedAt;
+    }
+
+    public void setAccountCreatedAt(Instant accountCreatedAt) {
+        this.accountCreatedAt = accountCreatedAt;
     }
 
 }

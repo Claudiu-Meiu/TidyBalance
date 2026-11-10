@@ -1,5 +1,6 @@
 package com.claudiumeiu.tidybalance_backend.user.service;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -46,6 +47,7 @@ public class UserAccountService {
         user.setNickname(request.nickname());
         user.setUsername(request.username());
         user.setPassword(passwordEncoder.encode(request.password()));
+        user.setAccountCreatedAt(Instant.now());
 
         userRepository.saveAndFlush(user);
     }
@@ -64,7 +66,8 @@ public class UserAccountService {
         return new CurrentUserAuthenticatedDto(
                 user.getPublicUserId(),
                 user.getNickname(),
-                user.getUsername());
+                user.getUsername(),
+                user.getAccountCreatedAt());
     }
 
     public void changePassword(ChangeUserPasswordRequestDto request) {
@@ -102,7 +105,8 @@ public class UserAccountService {
         return new CurrentUserAuthenticatedDto(
                 user.getPublicUserId(),
                 user.getNickname(),
-                user.getUsername());
+                user.getUsername(),
+                user.getAccountCreatedAt());
     }
 
     public void changeUsername(ChangeUserUsernameRequestDto request) {

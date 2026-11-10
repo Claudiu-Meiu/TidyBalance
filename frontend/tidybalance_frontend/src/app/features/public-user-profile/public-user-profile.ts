@@ -1,4 +1,5 @@
 import { Component, inject, input, OnInit } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { PublicUserProfileModel } from './public-user-profile.model';
 import { UserStateService } from '../auth/user-state.service';
 import { TuiButton } from '@taiga-ui/core';
@@ -7,7 +8,7 @@ import { Router } from '@angular/router';
 import { AppRoutesPagesEnum } from '../../app.routes-pages.enum';
 
 @Component({
-  imports: [TuiButton],
+  imports: [DatePipe, TuiButton],
   selector: 'app-public-user-profile',
   styleUrl: './public-user-profile.css',
   templateUrl: './public-user-profile.html',
