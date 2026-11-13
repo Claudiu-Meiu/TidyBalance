@@ -10,6 +10,9 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      FILE_STORAGE_PROFILE_PICTURE_LOCATION: /app/uploads/profile_pictures
+    volumes:
+      - ./uploads/profile_pictures:/app/uploads/profile_pictures
     depends_on:
       app_db:
         condition: service_healthy

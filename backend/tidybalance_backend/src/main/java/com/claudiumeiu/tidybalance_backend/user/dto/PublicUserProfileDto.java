@@ -6,6 +6,7 @@ import java.util.UUID;
 public record PublicUserProfileDto(
                 UUID publicUserId,
                 String nickname,
-                Instant accountCreatedAt) {
+                Instant accountCreatedAt,
+                String profilePicture) {
 
 }

@@ -1,6 +1,118 @@
-<p>Nickname: {{ publicUserProfile().nickname }}</p>
-<p>Member since {{ publicUserProfile().accountCreatedAt | date: 'dd MMMM yyyy' }}</p>
+<div class="flex flex-col gap-6 py-20 w-full max-w-4xl mx-auto px-4">
+  <div tuiCardLarge appearance="floating">
+    <div class="flex justify-between gap-6 flex-wrap">
+      <div class="flex items-center gap-6 flex-wrap">
+        <!-- Profile Picture -->
+        @if (publicUserProfile().profilePicture !== null) {
+          @if (isOwnPublicProfile()) {
+            <div
+              (click)="openUpdateProfilePictureDialogBtn()"
+              tuiAvatar
+              size="xxl"
+              class="relative group cursor-pointer overflow-hidden rounded-full"
+            >
+              <img
+                [src]="
+                  publicUserProfileService.getProfilePictureUrl(
+                    publicUserProfile().profilePicture
+                  ) +
+                  '?v=' +
+                  profilePictureVersion()
+                "
+                class="w-full h-full object-cover"
+              />
 
-@if (isOwnPublicProfile()) {
-  <button (click)="editProfileBtn()" tuiButton type="button" size="m">Edit profile</button>
-}
+              <div
+                class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white"
+              >
+                <tui-icon icon="@tui.camera" class="text-xl" />
+              </div>
+            </div>
+          } @else {
+            <div tuiAvatar size="xxl">
+              <img
+                [src]="
+                  publicUserProfileService.getProfilePictureUrl(publicUserProfile().profilePicture)
+                "
+                class="w-full h-full object-cover"
+              />
+            </div>
+          }
+        } @else {
+          @if (isOwnPublicProfile()) {
+            <div
+              (click)="openUpdateProfilePictureDialogBtn()"
+              tuiAvatar="@tui.user"
+              size="xxl"
+              class="relative group cursor-pointer overflow-hidden rounded-full"
+            >
+              <div
+                class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white z-10"
+              >
+                <tui-icon icon="@tui.camera" class="text-xl" />
+              </div>
+            </div>
+          } @else {
+            <div tuiAvatar="@tui.user" size="xxl"></div>
+          }
+        }
+        <!-- Update Profile Picture -->
+        <ng-template
+          [(tuiDialog)]="isUpdateProfilePictureDialogOpen"
+          [tuiDialogOptions]="{ size: 's' }"
+          let-context
+        >
+          <header tuiHeader>
+            <h2 tuiTitle>Update profile picture</h2>
+          </header>
+
+          <form
+            [formGroup]="profilePictureForm"
+            (ngSubmit)="uploadProfilePicture()"
+            tuiForm="m"
+            class="flex flex-col gap-6"
+          >
+            @if (!loadedProfilePictureFile()) {
+              <label tuiInputFiles>
+                <input
+                  accept="image/jpg, image/jpeg, image/png, image/webp"
+                  tuiInputFiles
+                  formControlName="profilePictureFile"
+                />
+              </label>
+            }
+
+            @if (loadedProfilePictureFile(); as file) {
+              <tui-file size="l" [file]="file" (remove)="removeProfilePictureFileBtn()" />
+            }
+
+            <footer>
+              <button tuiButton type="submit" size="m" class="w-full">Submit</button>
+            </footer>
+          </form>
+        </ng-template>
+
+        <header tuiHeader="h3">
+          <h1 tuiTitle>
+            {{ publicUserProfile().nickname }}
+            <span tuiSubtitle
+              >Member since {{ publicUserProfile().accountCreatedAt | date: 'dd MMMM yyyy' }}</span
+            >
+          </h1>
+        </header>
+      </div>
+
+      @if (isOwnPublicProfile()) {
+        <button
+          (click)="accountSettingsBtn()"
+          tuiButton
+          appearance="secondary"
+          type="button"
+          size="m"
+        >
+          Account settings
+        </button>
+      }
+    </div>
+  </div>
+</div>

@@ -155,6 +155,10 @@ export class Account implements OnInit {
     });
   }
 
+  protected viewProfileBtn(): void {
+    this.router.navigate([`${AppRoutesPagesEnum.PAGE_USER_PROFILE}/${this.user()?.publicUserId}`]);
+  }
+
   protected openChangePasswordDialogBtn(): void {
     this.changePasswordForm.reset();
     this.isChangePasswordDialogOpen = true;

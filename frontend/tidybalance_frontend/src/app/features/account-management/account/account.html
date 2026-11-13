@@ -1,10 +1,16 @@
 <div class="flex flex-col gap-6 py-20 w-full max-w-4xl mx-auto px-4">
-  <header tuiHeader="h3">
-    <h1 tuiTitle>
-      Account
-      <span tuiSubtitle>Member since {{ user()?.accountCreatedAt | date: 'dd MMMM yyyy' }}</span>
-    </h1>
-  </header>
+  <div class="flex justify-between gap-4 flex-wrap">
+    <header tuiHeader="h3">
+      <h1 tuiTitle>
+        Account
+        <span tuiSubtitle>Member since {{ user()?.accountCreatedAt | date: 'dd MMMM yyyy' }}</span>
+      </h1>
+    </header>
+
+    <button (click)="viewProfileBtn()" tuiButton appearance="secondary" type="button" size="m">
+      View profile
+    </button>
+  </div>
 
   <!-- Change Password -->
   <div tuiCardLarge appearance="floating">
@@ -96,7 +102,7 @@
         size="m"
         class="shrink-0"
       >
-        Change
+        Change nickname
       </button>
 
       <ng-template
@@ -154,7 +160,7 @@
         size="m"
         class="shrink-0"
       >
-        Change
+        Change username
       </button>
 
       <ng-template

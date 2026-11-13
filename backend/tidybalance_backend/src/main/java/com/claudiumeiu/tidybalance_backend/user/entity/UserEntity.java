@@ -33,6 +33,9 @@ public class UserEntity {
     @Column(nullable = false, updatable = false)
     private Instant accountCreatedAt;
 
+    @Column(nullable = true)
+    private String profilePicture;
+
     // Getters and setters
 
     public Long getId() {
@@ -81,6 +84,14 @@ public class UserEntity {
 
     public void setAccountCreatedAt(Instant accountCreatedAt) {
         this.accountCreatedAt = accountCreatedAt;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
 }

@@ -7,4 +7,5 @@ export enum AppRoutesApiEnum {
   API_USERS_AUTHENTICATE = '/api/users/authenticate',
   API_USERS_LOGOUT = '/api/users/logout',
   API_USERS_PROFILES = '/api/users/profiles',
+  API_USERS_PROFILES_PROFILE_PICTURE = '/api/users/profiles/profile-picture',
 }

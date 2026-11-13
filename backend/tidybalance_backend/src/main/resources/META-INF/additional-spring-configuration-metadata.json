@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "file-storage.profile-picture-location",
+      "type": "java.lang.String",
+      "description": "Sets profile picture storage location."
+    }
+  ]
+}

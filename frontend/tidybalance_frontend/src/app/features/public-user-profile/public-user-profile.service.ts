@@ -14,4 +14,16 @@ export class PublicUserProfileService {
       `${AppRoutesApiEnum.API_USERS_PROFILES}/${publicUserId}`,
     );
   }
+
+  updateProfilePicture(file: File): Observable<void> {
+    const formData = new FormData();
+
+    formData.append('file', file, file.name);
+
+    return this.http.post<void>(AppRoutesApiEnum.API_USERS_PROFILES_PROFILE_PICTURE, formData);
+  }
+
+  getProfilePictureUrl(profilePictureFilename: string): string {
+    return `${AppRoutesApiEnum.API_USERS_PROFILES_PROFILE_PICTURE}/${profilePictureFilename}`;
+  }
 }
