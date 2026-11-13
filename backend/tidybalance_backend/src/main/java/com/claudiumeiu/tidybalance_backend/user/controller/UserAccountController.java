@@ -2,7 +2,6 @@ package com.claudiumeiu.tidybalance_backend.user.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +19,7 @@ import com.claudiumeiu.tidybalance_backend.user.service.UserAccountService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/users/me")
+@RequestMapping("/api/users/account")
 public class UserAccountController {
 
     private final UserAccountService userAccountService;
@@ -35,11 +34,6 @@ public class UserAccountController {
             @Valid @RequestBody CreateUserRequestDto request) {
 
         userAccountService.createUser(request);
-    }
-
-    @GetMapping
-    public CurrentUserAuthenticatedDto me() {
-        return userAccountService.me();
     }
 
     @PatchMapping("/password")

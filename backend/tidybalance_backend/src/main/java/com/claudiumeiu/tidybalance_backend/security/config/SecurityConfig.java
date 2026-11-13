@@ -20,7 +20,7 @@ public class SecurityConfig {
                 http
                                 .csrf(csrf -> csrf.spa())
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/api/users/authenticate", "/api/users/me/register")
+                                                .requestMatchers("/api/users/auth/login", "/api/users/account/register")
                                                 .permitAll()
                                                 .requestMatchers("/api/**").authenticated()
                                                 .anyRequest().permitAll())
@@ -30,7 +30,7 @@ public class SecurityConfig {
                                                                                 .sendError(HttpServletResponse.SC_UNAUTHORIZED)))
 
                                 .formLogin(form -> form
-                                                .loginProcessingUrl("/api/users/authenticate")
+                                                .loginProcessingUrl("/api/users/auth/login")
                                                 .successHandler((request, response, authentication) -> {
                                                         response.setStatus(HttpServletResponse.SC_OK);
                                                 })
@@ -39,7 +39,7 @@ public class SecurityConfig {
                                                 }))
                                 .rememberMe(Customizer.withDefaults())
                                 .logout(logout -> logout
-                                                .logoutUrl("/api/users/logout")
+                                                .logoutUrl("/api/users/auth/logout")
                                                 .deleteCookies("JSESSIONID")
                                                 .logoutSuccessHandler((request, response, authentication) -> response
                                                                 .setStatus(HttpServletResponse.SC_NO_CONTENT)));

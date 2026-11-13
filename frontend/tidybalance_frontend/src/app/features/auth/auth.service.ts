@@ -19,7 +19,7 @@ export class AuthService {
 
   me(): Observable<CurrentUser> {
     return this.http
-      .get<CurrentUser>(AppRoutesApiEnum.API_USERS_ACCOUNT)
+      .get<CurrentUser>(AppRoutesApiEnum.API_USERS_AUTH_ME)
       .pipe(tap((user) => this.currentUser.set(user)));
   }
 
@@ -29,7 +29,7 @@ export class AuthService {
       .set('password', request.password)
       .set('remember-me', request.rememberMe.toString());
 
-    return this.http.post<void>(AppRoutesApiEnum.API_USERS_AUTHENTICATE, body, {
+    return this.http.post<void>(AppRoutesApiEnum.API_USERS_AUTH_LOGIN, body, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -37,6 +37,6 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    return this.http.post<void>(AppRoutesApiEnum.API_USERS_LOGOUT, {});
+    return this.http.post<void>(AppRoutesApiEnum.API_USERS_AUTH_LOGOUT, {});
   }
 }

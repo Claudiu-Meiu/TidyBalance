@@ -33,6 +33,14 @@ public class UserAccountService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    private UserEntity currentUser() {
+        String username = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+    }
+
     public void createUser(CreateUserRequestDto request) {
         if (userRepository.existsByNickname(request.nickname())) {
             throw new NicknameAlreadyExistsException();
@@ -50,24 +58,6 @@ public class UserAccountService {
         user.setAccountCreatedAt(Instant.now());
 
         userRepository.saveAndFlush(user);
-    }
-
-    private UserEntity currentUser() {
-        String username = SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getName();
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-    }
-
-    public CurrentUserAuthenticatedDto me() {
-        UserEntity user = currentUser();
-
-        return new CurrentUserAuthenticatedDto(
-                user.getPublicUserId(),
-                user.getNickname(),
-                user.getUsername(),
-                user.getAccountCreatedAt());
     }
 
     public void changePassword(ChangeUserPasswordRequestDto request) {
