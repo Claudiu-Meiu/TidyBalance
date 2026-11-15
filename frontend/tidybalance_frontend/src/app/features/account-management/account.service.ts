@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { AppRoutesApiEnum } from '../../app.routes-api.enum';
 import { CurrentUser } from '../auth/current-user.model';
+import { UserStateService } from '../auth/user-state.service';
 
 interface RegisterRequest {
   nickname: string;
@@ -28,6 +29,7 @@ interface ChangeUserUsernameRequest {
 @Service()
 export class AccountService {
   private http = inject(HttpClient);
+  private userStateService = inject(UserStateService);
 
   register(request: RegisterRequest): Observable<void> {
     return this.http.post<void>(AppRoutesApiEnum.API_USERS_ACCOUNT_REGISTER, request);
@@ -38,7 +40,9 @@ export class AccountService {
   }
 
   changeNickname(request: ChangeUserNicknameRequest): Observable<CurrentUser> {
-    return this.http.patch<CurrentUser>(AppRoutesApiEnum.API_USERS_ACCOUNT_NICKNAME, request);
+    return this.http
+      .patch<CurrentUser>(AppRoutesApiEnum.API_USERS_ACCOUNT_NICKNAME, request)
+      .pipe(tap({ next: (updatedUser) => this.userStateService.setUser(updatedUser) }));
   }
 
   changeUsername(request: ChangeUserUsernameRequest): Observable<void> {

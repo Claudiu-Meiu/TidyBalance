@@ -200,7 +200,6 @@ export class Account implements OnInit {
           this.isChangePasswordDialogOpen = false;
           this.authService.logout().subscribe({
             next: () => {
-              this.userStateService.clearUser();
               this.router.navigate([AppRoutesPagesEnum.PAGE_LOGIN]);
             },
           });
@@ -256,8 +255,7 @@ export class Account implements OnInit {
       .changeNickname({ newNickname: newNickname })
       .pipe(finalize(() => (this.isChangeNicknameFormSubmitting = false)))
       .subscribe({
-        next: (updatedUser) => {
-          this.userStateService.setUser(updatedUser);
+        next: () => {
           this.isChangeNicknameDialogOpen = false;
         },
         error: (error: HttpErrorResponse) => {
@@ -298,7 +296,6 @@ export class Account implements OnInit {
           this.isChangeUsernameDialogOpen = false;
           this.authService.logout().subscribe({
             next: () => {
-              this.userStateService.clearUser();
               this.router.navigate([AppRoutesPagesEnum.PAGE_LOGIN]);
             },
           });
@@ -335,7 +332,6 @@ export class Account implements OnInit {
         next: () => {
           this.authService.logout().subscribe({
             next: () => {
-              this.userStateService.clearUser();
               this.router.navigate([AppRoutesPagesEnum.PAGE_LOGIN]);
             },
           });

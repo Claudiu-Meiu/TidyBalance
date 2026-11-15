@@ -3,6 +3,7 @@ import { inject, Service, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { CurrentUser } from './current-user.model';
 import { AppRoutesApiEnum } from '../../app.routes-api.enum';
+import { UserStateService } from './user-state.service';
 
 interface LoginRequest {
   username: string;
@@ -13,14 +14,12 @@ interface LoginRequest {
 @Service()
 export class AuthService {
   private http = inject(HttpClient);
-
-  private readonly currentUser = signal<CurrentUser | null>(null);
-  readonly user = this.currentUser.asReadonly();
+  private userStateService = inject(UserStateService);
 
   me(): Observable<CurrentUser> {
     return this.http
       .get<CurrentUser>(AppRoutesApiEnum.API_USERS_AUTH_ME)
-      .pipe(tap((user) => this.currentUser.set(user)));
+      .pipe(tap({ next: (currentUser) => this.userStateService.setUser(currentUser) }));
   }
 
   login(request: LoginRequest): Observable<void> {
@@ -37,6 +36,8 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    return this.http.post<void>(AppRoutesApiEnum.API_USERS_AUTH_LOGOUT, {});
+    return this.http
+      .post<void>(AppRoutesApiEnum.API_USERS_AUTH_LOGOUT, {})
+      .pipe(tap({ next: () => this.userStateService.clearUser() }));
   }
 }
