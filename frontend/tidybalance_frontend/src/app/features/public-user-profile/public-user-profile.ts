@@ -6,8 +6,8 @@ import { UserStateService } from '../auth/user-state.service';
 import { PublicUserProfileModel } from './public-user-profile.model';
 import { AppRoutesPagesEnum } from '../../app.routes-pages.enum';
 
-import { TuiButton, TuiDialog, TuiIcon, TuiTitle } from '@taiga-ui/core';
-import { TuiCardLarge, TuiHeader, TuiForm } from '@taiga-ui/layout';
+import { TuiButton, TuiDialog, TuiIcon, TuiTitle, TuiDataList, TuiDropdown } from '@taiga-ui/core';
+import { TuiCardLarge, TuiHeader } from '@taiga-ui/layout';
 import { Title } from '@angular/platform-browser';
 import { TuiAvatar, TuiFiles } from '@taiga-ui/kit';
 import { PublicUserProfileService } from './public-user-profile.service';
@@ -25,6 +25,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
     TuiFiles,
     TuiDialog,
     TuiIcon,
+    TuiDataList,
+    TuiDropdown,
   ],
   selector: 'app-public-user-profile',
   templateUrl: './public-user-profile.html',
@@ -43,8 +45,6 @@ export class PublicUserProfile implements OnInit {
 
   protected readonly publicUserProfile = linkedSignal(() => this.publicUserProfileInput());
 
-  protected isUpdateProfilePictureDialogOpen = false;
-
   protected readonly profilePictureForm = new FormGroup({
     profilePictureFile: new FormControl<File | ''>('', {
       validators: [Validators.required],
@@ -58,6 +58,14 @@ export class PublicUserProfile implements OnInit {
   );
 
   protected readonly profilePictureVersion = signal(Date.now());
+
+  protected profilePictureMenuItems = [
+    { label: 'Update profile picture', action: () => this.openUpdateProfilePictureDialogBtn() },
+    { label: 'Remove', action: () => (this.isProfilePictureMenuOpen = false) },
+  ];
+
+  protected isProfilePictureMenuOpen = false;
+  protected isUpdateProfilePictureDialogOpen = false;
 
   ngOnInit(): void {
     this.titleService.setTitle(`Profile - ${this.publicUserProfile().nickname}`);

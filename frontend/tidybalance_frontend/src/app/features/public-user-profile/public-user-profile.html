@@ -3,59 +3,47 @@
     <div class="flex justify-between gap-6 flex-wrap">
       <div class="flex items-center gap-6 flex-wrap">
         <!-- Profile Picture -->
-        @if (publicUserProfile().profilePicture !== null) {
-          @if (isOwnPublicProfile()) {
-            <div
-              (click)="openUpdateProfilePictureDialogBtn()"
-              tuiAvatar
-              size="xxl"
-              class="relative group cursor-pointer overflow-hidden rounded-full"
-            >
-              <img
-                [src]="
-                  publicUserProfileService.getProfilePictureUrl(
-                    publicUserProfile().profilePicture
-                  ) +
-                  '?v=' +
-                  profilePictureVersion()
-                "
-                class="w-full h-full object-cover"
-              />
+        <div
+          tuiAvatar
+          size="xxl"
+          [tuiAvatar]="publicUserProfile().profilePicture === null ? '@tui.user' : null"
+          [tuiDropdown]="isOwnPublicProfile() ? profilePictureDropdownView : null"
+          [(tuiDropdownOpen)]="isProfilePictureMenuOpen"
+          [tuiAppearanceState]="isProfilePictureMenuOpen ? 'active' : null"
+          [class.cursor-pointer]="isOwnPublicProfile()"
+          class="relative group overflow-hidden rounded-full"
+        >
+          @if (publicUserProfile().profilePicture !== null) {
+            <img
+              [src]="
+                publicUserProfileService.getProfilePictureUrl(publicUserProfile().profilePicture) +
+                (isOwnPublicProfile() ? '?v=' + profilePictureVersion() : '')
+              "
+              class="w-full h-full object-cover"
+            />
+          }
 
-              <div
-                class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white"
-              >
-                <tui-icon icon="@tui.camera" class="text-xl" />
-              </div>
-            </div>
-          } @else {
-            <div tuiAvatar size="xxl">
-              <img
-                [src]="
-                  publicUserProfileService.getProfilePictureUrl(publicUserProfile().profilePicture)
-                "
-                class="w-full h-full object-cover"
-              />
-            </div>
-          }
-        } @else {
           @if (isOwnPublicProfile()) {
             <div
-              (click)="openUpdateProfilePictureDialogBtn()"
-              tuiAvatar="@tui.user"
-              size="xxl"
-              class="relative group cursor-pointer overflow-hidden rounded-full"
+              class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white"
             >
-              <div
-                class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white z-10"
-              >
-                <tui-icon icon="@tui.camera" class="text-xl" />
-              </div>
+              <tui-icon icon="@tui.edit" class="text-xl" />
             </div>
-          } @else {
-            <div tuiAvatar="@tui.user" size="xxl"></div>
           }
-        }
+        </div>
+
+        <ng-template #profilePictureDropdownView>
+          <tui-data-list>
+            <tui-opt-group>
+              @for (item of profilePictureMenuItems; track item) {
+                <button tuiOption type="button" (click)="item.action()">
+                  {{ item.label }}
+                </button>
+              }
+            </tui-opt-group>
+          </tui-data-list>
+        </ng-template>
+
         <!-- Update Profile Picture -->
         <ng-template
           [(tuiDialog)]="isUpdateProfilePictureDialogOpen"
