@@ -26,6 +26,10 @@ interface ChangeUserUsernameRequest {
   currentPassword: string;
 }
 
+interface DeleteUserAccountRequest {
+  currentPassword: string;
+}
+
 @Service()
 export class AccountService {
   private http = inject(HttpClient);
@@ -49,7 +53,7 @@ export class AccountService {
     return this.http.patch<void>(AppRoutesApiEnum.API_USERS_ACCOUNT_USERNAME, request);
   }
 
-  deleteAccount(): Observable<void> {
-    return this.http.delete<void>(AppRoutesApiEnum.API_USERS_ACCOUNT);
+  deleteAccount(request: DeleteUserAccountRequest): Observable<void> {
+    return this.http.delete<void>(AppRoutesApiEnum.API_USERS_ACCOUNT, { body: request });
   }
 }

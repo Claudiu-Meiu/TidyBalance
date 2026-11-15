@@ -14,6 +14,7 @@ import com.claudiumeiu.tidybalance_backend.user.dto.ChangeUserPasswordRequestDto
 import com.claudiumeiu.tidybalance_backend.user.dto.ChangeUserUsernameRequestDto;
 import com.claudiumeiu.tidybalance_backend.user.dto.CreateUserRequestDto;
 import com.claudiumeiu.tidybalance_backend.user.dto.CurrentUserAuthenticatedDto;
+import com.claudiumeiu.tidybalance_backend.user.dto.DeleteUserAccountRequestDto;
 import com.claudiumeiu.tidybalance_backend.user.service.UserAccountService;
 
 import jakarta.validation.Valid;
@@ -55,7 +56,7 @@ public class UserAccountController {
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAccount() {
-        userAccountService.deleteUser();
+    public void deleteAccount(@Valid @RequestBody DeleteUserAccountRequestDto request) {
+        userAccountService.deleteUser(request);
     }
 }

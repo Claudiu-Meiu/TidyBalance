@@ -242,7 +242,7 @@
         </h1>
       </header>
       <button
-        (click)="isDeleteAccountDialogOpen = true"
+        (click)="openDeleteUserAccountDialogBtn()"
         tuiButton
         appearance="secondary"
         type="button"
@@ -257,26 +257,40 @@
         [tuiDialogOptions]="{ size: 's' }"
         let-context
       >
-        <header tuiHeader>
-          <hgroup tuiTitle>
-            <h2>Warning</h2>
-            <p>Deletion is permanent and cannot be undone.</p>
-          </hgroup>
-        </header>
+        <form [formGroup]="deleteUserAccountForm" (ngSubmit)="deleteAccount()" tuiForm="m">
+          <header tuiHeader>
+            <hgroup tuiTitle>
+              <h2>Warning</h2>
+              <p>Deletion is permanent and cannot be undone.</p>
+            </hgroup>
+          </header>
 
-        <footer>
-          <button
-            (click)="deleteAccount()"
-            tuiButton
-            appearance="primary-destructive"
-            type="button"
-            [loading]="isDeleteAccountSubmitting"
-            size="m"
-            class="w-full"
-          >
-            Delete user {{ user()?.username }}
-          </button>
-        </footer>
+          <tui-textfield tuiTextfieldSize="m">
+            <label tuiLabel>Current password</label>
+            <input formControlName="currentPassword" tuiInput type="password" />
+            <tui-icon tuiPassword />
+          </tui-textfield>
+          <tui-error formControlName="currentPassword" />
+
+          @if (deleteUserAccountForm.hasError(requestErrorFormInputIdentifier.serverUnavailable)) {
+            <div tuiError style="color: var(--tui-text-negative)">
+              Unable to connect to the server. Please try again later.
+            </div>
+          }
+
+          <footer>
+            <button
+              tuiButton
+              appearance="primary-destructive"
+              type="submit"
+              [loading]="isDeleteAccountFormSubmitting"
+              size="m"
+              class="w-full"
+            >
+              Delete user {{ user()?.username }}
+            </button>
+          </footer>
+        </form>
       </ng-template>
     </div>
   </div>

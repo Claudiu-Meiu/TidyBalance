@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.claudiumeiu.tidybalance_backend.user.dto.CurrentUserAuthenticatedDto;
+import com.claudiumeiu.tidybalance_backend.user.dto.DeleteUserAccountRequestDto;
 import com.claudiumeiu.tidybalance_backend.user.dto.ChangeUserNicknameRequestDto;
 import com.claudiumeiu.tidybalance_backend.user.dto.ChangeUserPasswordRequestDto;
 import com.claudiumeiu.tidybalance_backend.user.dto.ChangeUserUsernameRequestDto;
@@ -107,7 +108,13 @@ public class UserAccountService {
         }
     }
 
-    public void deleteUser() {
+    public void deleteUser(DeleteUserAccountRequestDto request) {
+        UserEntity user = userAuthService.currentUser();
+
+        if (!passwordEncoder.matches(request.currentPassword(), user.getPassword())) {
+            throw new IncorrectPasswordException();
+        }
+
         userRepository.delete(userAuthService.currentUser());
     }
 }

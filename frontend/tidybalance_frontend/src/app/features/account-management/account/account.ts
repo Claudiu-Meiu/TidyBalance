@@ -128,10 +128,17 @@ export class Account implements OnInit {
     appearance: new FormControl('', { nonNullable: true }),
   });
 
+  protected readonly deleteUserAccountForm = new FormGroup({
+    currentPassword: new FormControl('', {
+      validators: [Validators.required],
+      nonNullable: true,
+    }),
+  });
+
   isChangePasswordFormSubmitting = false;
   isChangeNicknameFormSubmitting = false;
   isChangeUsernameFormSubmitting = false;
-  isDeleteAccountSubmitting = false;
+  isDeleteAccountFormSubmitting = false;
 
   ngOnInit(): void {
     const savedTheme = localStorage.getItem('tuiDark');
@@ -174,6 +181,11 @@ export class Account implements OnInit {
     this.changeUsernameForm.controls.newUsername.setValue(this.user()?.username ?? '');
     this.changeUsernameForm.controls.currentPassword.setValue('');
     this.isChangeUsernameDialogOpen = true;
+  }
+
+  protected openDeleteUserAccountDialogBtn(): void {
+    this.deleteUserAccountForm.reset();
+    this.isDeleteAccountDialogOpen = true;
   }
 
   protected changePassword(): void {
@@ -323,11 +335,18 @@ export class Account implements OnInit {
   }
 
   protected deleteAccount(): void {
-    this.isDeleteAccountSubmitting = true;
+    const currentPassword = this.deleteUserAccountForm.controls.currentPassword.value;
+
+    if (this.deleteUserAccountForm.invalid) {
+      this.deleteUserAccountForm.markAllAsTouched();
+      return;
+    }
+
+    this.isDeleteAccountFormSubmitting = true;
 
     this.accountService
-      .deleteAccount()
-      .pipe(finalize(() => (this.isDeleteAccountSubmitting = false)))
+      .deleteAccount({ currentPassword: currentPassword })
+      .pipe(finalize(() => (this.isDeleteAccountFormSubmitting = false)))
       .subscribe({
         next: () => {
           this.authService.logout().subscribe({
@@ -336,8 +355,18 @@ export class Account implements OnInit {
             },
           });
         },
-        error(error) {
-          console.log('Account deletion failed:', error);
+        error: (error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.Unauthorized) {
+            if (error.error.code === this.requestErrorCode.INCORRECT_PASSWORD) {
+              this.deleteUserAccountForm.controls.currentPassword.setErrors({
+                [this.requestErrorFormInputIdentifier.incorrectPassword]: true,
+              });
+            }
+          } else if (error.status === 0 || error.status === HttpStatusCode.BadGateway) {
+            this.deleteUserAccountForm.setErrors({
+              [this.requestErrorFormInputIdentifier.serverUnavailable]: true,
+            });
+          }
         },
       });
   }
