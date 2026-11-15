@@ -4,8 +4,6 @@ import java.time.Instant;
 import java.util.UUID;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,18 +25,13 @@ public class UserAccountService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserAuthService userAuthService;
 
-    public UserAccountService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserAccountService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+            UserAuthService userAuthService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    private UserEntity currentUser() {
-        String username = SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getName();
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        this.userAuthService = userAuthService;
     }
 
     public void createUser(CreateUserRequestDto request) {
@@ -61,7 +54,7 @@ public class UserAccountService {
     }
 
     public void changePassword(ChangeUserPasswordRequestDto request) {
-        UserEntity user = currentUser();
+        UserEntity user = userAuthService.currentUser();
 
         if (!passwordEncoder.matches(request.currentPassword(), user.getPassword())) {
             throw new IncorrectPasswordException();
@@ -78,7 +71,7 @@ public class UserAccountService {
     }
 
     public CurrentUserAuthenticatedDto changeNickname(ChangeUserNicknameRequestDto request) {
-        UserEntity user = currentUser();
+        UserEntity user = userAuthService.currentUser();
 
         if (userRepository.existsByNicknameAndIdNot(request.newNickname(), user.getId())) {
             throw new NicknameAlreadyExistsException();
@@ -92,15 +85,11 @@ public class UserAccountService {
             throw new NicknameAlreadyExistsException();
         }
 
-        return new CurrentUserAuthenticatedDto(
-                user.getPublicUserId(),
-                user.getNickname(),
-                user.getUsername(),
-                user.getAccountCreatedAt());
+        return userAuthService.me();
     }
 
     public void changeUsername(ChangeUserUsernameRequestDto request) {
-        UserEntity user = currentUser();
+        UserEntity user = userAuthService.currentUser();
 
         if (!passwordEncoder.matches(request.currentPassword(), user.getPassword())) {
             throw new IncorrectPasswordException();
@@ -119,6 +108,6 @@ public class UserAccountService {
     }
 
     public void deleteUser() {
-        userRepository.delete(currentUser());
+        userRepository.delete(userAuthService.currentUser());
     }
 }

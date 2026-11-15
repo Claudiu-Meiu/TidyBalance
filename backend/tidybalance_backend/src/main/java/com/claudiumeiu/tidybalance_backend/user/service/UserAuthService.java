@@ -17,7 +17,7 @@ public class UserAuthService {
         this.userRepository = userRepository;
     }
 
-    private UserEntity currentUser() {
+    public UserEntity currentUser() {
         String username = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
