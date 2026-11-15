@@ -6,7 +6,6 @@ import { AppRoutesPagesEnum } from '../../app.routes-pages.enum';
 @Component({
   imports: [TuiButton],
   selector: 'app-page-not-found',
-  styleUrl: './page-not-found.css',
   templateUrl: './page-not-found.html',
 })
 export class PageNotFound {

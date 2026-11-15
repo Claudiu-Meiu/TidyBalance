@@ -27,7 +27,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
     TuiIcon,
   ],
   selector: 'app-public-user-profile',
-  styleUrl: './public-user-profile.css',
   templateUrl: './public-user-profile.html',
 })
 export class PublicUserProfile implements OnInit {

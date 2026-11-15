@@ -32,7 +32,6 @@ import { AccountService } from '../account.service';
     TuiHeader,
   ],
   selector: 'app-register',
-  styleUrl: './register.css',
   templateUrl: './register.html',
 })
 export class Register {

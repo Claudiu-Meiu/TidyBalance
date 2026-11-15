@@ -53,7 +53,6 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
     TuiButtonLoading,
   ],
   selector: 'app-account',
-  styleUrl: './account.css',
   templateUrl: './account.html',
 })
 export class Account implements OnInit {
