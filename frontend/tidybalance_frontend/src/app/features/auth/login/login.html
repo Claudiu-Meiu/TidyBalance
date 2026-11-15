@@ -29,10 +29,10 @@
         <label tuiLabel for="rememberMe" class="cursor-pointer">Remember me</label>
       </div>
 
-      @if (loginForm.hasError(loginFormSubmitErrors.invalidCredentials)) {
+      @if (loginForm.hasError(requestErrorFormInputIdentifier.invalidLogin)) {
         <div tuiError style="color: var(--tui-text-negative)">Incorrect username or password.</div>
       }
-      @if (loginForm.hasError(loginFormSubmitErrors.serverUnavailable)) {
+      @if (loginForm.hasError(requestErrorFormInputIdentifier.serverUnavailable)) {
         <div tuiError style="color: var(--tui-text-negative)">
           Unable to connect to the server. Please try again later.
         </div>

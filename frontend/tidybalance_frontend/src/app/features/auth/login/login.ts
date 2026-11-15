@@ -1,19 +1,18 @@
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { finalize } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+
+import { AuthService } from '../auth.service';
+
+import { AppRoutesPagesEnum } from '../../../app.routes-pages.enum';
+import { RequestErrorFormInputIdentifier } from '../../../app.validation-form-errors';
+
 import { TuiButton, TuiInput, TuiCheckbox, TuiError, TuiTitle, TuiIcon } from '@taiga-ui/core';
 import { TuiAutoFocus } from '@taiga-ui/cdk';
 import { TuiPassword, TuiButtonLoading } from '@taiga-ui/kit';
 import { TuiCardLarge, TuiForm, TuiHeader } from '@taiga-ui/layout';
-import { AuthService } from '../auth.service';
-import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { AppRoutesPagesEnum } from '../../../app.routes-pages.enum';
-
-enum LoginFormSubmitErrors {
-  invalidCredentials = 'invalidCredentials',
-  serverUnavailable = 'serverUnavailable',
-}
 
 @Component({
   imports: [
@@ -39,7 +38,7 @@ export class Login {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  readonly loginFormSubmitErrors = LoginFormSubmitErrors;
+  protected readonly requestErrorFormInputIdentifier = RequestErrorFormInputIdentifier;
 
   protected readonly loginForm = new FormGroup({
     username: new FormControl('', {
@@ -79,11 +78,11 @@ export class Login {
         error: (error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.Unauthorized) {
             this.loginForm.setErrors({
-              [this.loginFormSubmitErrors.invalidCredentials]: true,
+              [this.requestErrorFormInputIdentifier.invalidLogin]: true,
             });
           } else if (error.status === 0 || error.status === HttpStatusCode.BadGateway) {
             this.loginForm.setErrors({
-              [this.loginFormSubmitErrors.serverUnavailable]: true,
+              [this.requestErrorFormInputIdentifier.serverUnavailable]: true,
             });
           }
         },

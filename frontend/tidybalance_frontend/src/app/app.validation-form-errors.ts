@@ -10,6 +10,7 @@ export enum RequestErrorCode {
 }
 
 export enum RequestErrorFormInputIdentifier {
+  invalidLogin = 'invalidLogin',
   incorrectPassword = 'incorrectPassword',
   newPasswordMustBeDifferent = 'newPasswordMustBeDifferent',
   retypedNewPasswordDoesntMatch = 'retypedNewPasswordDoesntMatch',
