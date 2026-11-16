@@ -16,7 +16,7 @@
           @if (publicUserProfile().profilePicture !== null) {
             <img
               [src]="
-                publicUserProfileService.getProfilePictureUrl(publicUserProfile().profilePicture) +
+                publicUserProfileService.getProfilePictureUrl(publicUserProfile().profilePicture!) +
                 (isOwnPublicProfile() ? '?v=' + profilePictureVersion() : '')
               "
               class="w-full h-full object-cover"
@@ -36,7 +36,11 @@
           <tui-data-list>
             <tui-opt-group>
               @for (item of profilePictureMenuItems; track item) {
-                <button tuiOption type="button" (click)="item.action()">
+                <button
+                  tuiOption
+                  type="button"
+                  (click)="item.action(); isProfilePictureMenuOpen = false"
+                >
                   {{ item.label }}
                 </button>
               }
@@ -71,7 +75,11 @@
             }
 
             @if (loadedProfilePictureFile(); as file) {
-              <tui-file size="l" [file]="file" (remove)="removeProfilePictureFileBtn()" />
+              <tui-file
+                size="l"
+                [file]="file"
+                (remove)="discardSelectedProfilePictureFileInputBtn()"
+              />
             }
 
             <footer>

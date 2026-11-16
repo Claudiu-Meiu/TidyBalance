@@ -15,6 +15,10 @@ export class PublicUserProfileService {
     );
   }
 
+  getProfilePictureUrl(profilePictureFilename: string): string {
+    return `${AppRoutesApiEnum.API_USERS_PROFILES_PROFILE_PICTURE}/${profilePictureFilename}`;
+  }
+
   updateProfilePicture(file: File): Observable<void> {
     const formData = new FormData();
 
@@ -23,7 +27,7 @@ export class PublicUserProfileService {
     return this.http.post<void>(AppRoutesApiEnum.API_USERS_PROFILES_PROFILE_PICTURE, formData);
   }
 
-  getProfilePictureUrl(profilePictureFilename: string): string {
-    return `${AppRoutesApiEnum.API_USERS_PROFILES_PROFILE_PICTURE}/${profilePictureFilename}`;
+  removeProfilePicture(): Observable<void> {
+    return this.http.delete<void>(AppRoutesApiEnum.API_USERS_PROFILES_PROFILE_PICTURE);
   }
 }

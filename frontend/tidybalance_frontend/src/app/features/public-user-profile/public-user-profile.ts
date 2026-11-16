@@ -61,7 +61,11 @@ export class PublicUserProfile implements OnInit {
 
   protected profilePictureMenuItems = [
     { label: 'Update profile picture', action: () => this.openUpdateProfilePictureDialogBtn() },
-    { label: 'Remove', action: () => (this.isProfilePictureMenuOpen = false) },
+    {
+      label: 'Remove',
+      action: () =>
+        this.publicUserProfile().profilePicture !== null ? this.removeProfilePicture() : null,
+    },
   ];
 
   protected isProfilePictureMenuOpen = false;
@@ -109,6 +113,22 @@ export class PublicUserProfile implements OnInit {
     });
   }
 
+  protected removeProfilePicture(): void {
+    this.publicUserProfileService.removeProfilePicture().subscribe({
+      next: () => {
+        const currentPublicUserProfile = this.publicUserProfile();
+
+        this.publicUserProfile.set({
+          ...currentPublicUserProfile,
+          profilePicture: null,
+        });
+      },
+      error: (err) => {
+        console.error('Error removing profile picture:', err);
+      },
+    });
+  }
+
   protected isOwnPublicProfile(): boolean {
     return true ? this.user()?.publicUserId === this.publicUserProfile().publicUserId : false;
   }
@@ -117,7 +137,7 @@ export class PublicUserProfile implements OnInit {
     this.router.navigate([AppRoutesPagesEnum.PAGE_ACCOUNT]);
   }
 
-  protected removeProfilePictureFileBtn(): void {
+  protected discardSelectedProfilePictureFileInputBtn(): void {
     this.profilePictureForm.controls.profilePictureFile.setValue('');
   }
 }

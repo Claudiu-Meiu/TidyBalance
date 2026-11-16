@@ -19,13 +19,15 @@ import com.claudiumeiu.tidybalance_backend.user.repository.UserRepository;
 @Service
 public class PublicUserProfileService {
 
+    private final UserAuthService userAuthService;
     private final UserRepository userRepository;
     private final ProfilePictureStorageService profilePictureStorageService;
 
     public PublicUserProfileService(UserRepository userRepository,
-            ProfilePictureStorageService profilePictureStorageService) {
+            ProfilePictureStorageService profilePictureStorageService, UserAuthService userAuthService) {
         this.userRepository = userRepository;
         this.profilePictureStorageService = profilePictureStorageService;
+        this.userAuthService = userAuthService;
     }
 
     public PublicUserProfileDto getPublicUserProfile(UUID publicUserId) {
@@ -55,6 +57,10 @@ public class PublicUserProfileService {
                         user.getAccountCreatedAt(),
                         user.getProfilePicture()))
                 .toList();
+    }
+
+    public Resource getProfilePicture(String filename) {
+        return profilePictureStorageService.loadProfilePicture(filename);
     }
 
     public void updateProfilePicture(MultipartFile file) {
@@ -88,7 +94,18 @@ public class PublicUserProfileService {
         userRepository.saveAndFlush(user);
     }
 
-    public Resource getProfilePicture(String filename) {
-        return profilePictureStorageService.loadProfilePicture(filename);
+    public void removeProfilePicture() {
+        UserEntity user = userAuthService.currentUser();
+
+        String currentFilename = user.getProfilePicture();
+
+        if (currentFilename == null || currentFilename.isBlank()) {
+            return;
+        }
+
+        profilePictureStorageService.deleteProfilePicture(currentFilename);
+
+        user.setProfilePicture(null);
+        userRepository.save(user);
     }
 }
