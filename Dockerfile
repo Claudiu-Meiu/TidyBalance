@@ -12,7 +12,7 @@ RUN npm run build -- --configuration production
 
 
 # Build Spring Boot
-FROM maven:3.9-eclipse-temurin-21 AS backend-build
+FROM maven:3.10-eclipse-temurin-21 AS backend-build
 
 WORKDIR /app
 
