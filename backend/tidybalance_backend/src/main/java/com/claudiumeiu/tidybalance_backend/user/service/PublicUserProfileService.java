@@ -68,21 +68,19 @@ public class PublicUserProfileService {
     public void updateProfilePicture(MultipartFile file) {
         UserEntity user = userAuthService.currentUser();
 
-        String extension = fileValidationService.extractNormalizedExtension(file.getOriginalFilename());
-
-        String storedFilename = user.getProfilePicture();
-        String newFilename = user.getPublicUserId() + "." + extension;
-
-        if (storedFilename != null
-                && !storedFilename.isBlank()
-                && !storedFilename.equals(newFilename)) {
-            profilePictureStorageService.deleteProfilePicture(storedFilename);
-        }
+        String oldFilename = user.getProfilePicture();
+        String newFilename = user.getPublicUserId() + ".webp";
 
         profilePictureStorageService.storeProfilePicture(file, newFilename);
 
         user.setProfilePicture(newFilename);
         userRepository.saveAndFlush(user);
+
+        if (oldFilename != null
+                && !oldFilename.isBlank()
+                && !oldFilename.equals(newFilename)) {
+            profilePictureStorageService.deleteProfilePicture(oldFilename);
+        }
     }
 
     public void removeProfilePicture() {

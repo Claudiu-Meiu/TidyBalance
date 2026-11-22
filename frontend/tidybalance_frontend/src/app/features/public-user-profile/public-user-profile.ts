@@ -95,8 +95,7 @@ export class PublicUserProfile implements OnInit {
         this.isUpdateProfilePictureDialogOpen = false;
 
         const currentPublicUserProfile = this.publicUserProfile();
-        const extension = profilePicture.name.substring(profilePicture.name.lastIndexOf('.'));
-        const newFilename = `${currentPublicUserProfile.publicUserId}${extension}`;
+        const newFilename = `${currentPublicUserProfile.publicUserId}.webp`;
 
         this.publicUserProfile.set({
           ...currentPublicUserProfile,

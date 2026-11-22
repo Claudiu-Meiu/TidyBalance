@@ -5,6 +5,9 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
+
+import java.awt.image.BufferedImage;
 import org.apache.tika.Tika;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -45,15 +48,19 @@ public class FileValidationService {
         String extension = extractNormalizedExtension(filename);
         String mediaType;
 
+        Set<String> allowedMimeTypes = switch (fileTypeEnum) {
+            case IMAGE -> IMAGE_MIME_TYPES;
+        };
+
         try (InputStream inputStream = file.getInputStream()) {
             mediaType = tika.detect(inputStream);
         } catch (IOException e) {
             throw new RuntimeException("Could not detect file MIME type", e);
         }
 
-        Set<String> allowedMimeTypes = switch (fileTypeEnum) {
-            case IMAGE -> IMAGE_MIME_TYPES;
-        };
+        if (!allowedMimeTypes.contains(mediaType)) {
+            throw new IllegalArgumentException("MIME type not allowed");
+        }
 
         boolean extensionMatchesMimeType = switch (fileTypeEnum) {
             case IMAGE -> switch (extension) {
@@ -63,10 +70,6 @@ public class FileValidationService {
                 default -> false;
             };
         };
-
-        if (!allowedMimeTypes.contains(mediaType)) {
-            throw new IllegalArgumentException("MIME type not allowed");
-        }
 
         if (!extensionMatchesMimeType) {
             throw new IllegalArgumentException("File extension does not match MIME type");

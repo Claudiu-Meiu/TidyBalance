@@ -1,5 +1,6 @@
 package com.claudiumeiu.tidybalance_backend.file.file_storage.service;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -13,6 +14,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.claudiumeiu.tidybalance_backend.file.file_processing.service.ImageProcessingService;
 import com.claudiumeiu.tidybalance_backend.file.file_storage.config.FileStorageProperties;
 import com.claudiumeiu.tidybalance_backend.file.file_validation.model.FileTypeEnum;
 import com.claudiumeiu.tidybalance_backend.file.file_validation.service.FileValidationService;
@@ -22,9 +24,10 @@ public class ProfilePictureStorageService {
 
     private final Path profilePictureRootLocation;
     private final FileValidationService fileValidationService;
+    private final ImageProcessingService imageProcessingService;
 
     public ProfilePictureStorageService(FileStorageProperties fileStorageProperties,
-            FileValidationService fileValidationService) {
+            FileValidationService fileValidationService, ImageProcessingService imageProcessingService) {
         if (fileStorageProperties.getProfilePictureLocation().trim().isEmpty()) {
             throw new RuntimeException("Storage location can't be empty.");
         }
@@ -33,6 +36,7 @@ public class ProfilePictureStorageService {
         init();
 
         this.fileValidationService = fileValidationService;
+        this.imageProcessingService = imageProcessingService;
     }
 
     public void init() {
@@ -44,23 +48,19 @@ public class ProfilePictureStorageService {
     }
 
     public void storeProfilePicture(MultipartFile file, String filename) {
-        Path destinationFile = this.profilePictureRootLocation.resolve(
-                Paths.get(filename))
-                .normalize().toAbsolutePath();
+        fileValidationService.validate(file, FileTypeEnum.IMAGE);
 
-        try {
-            fileValidationService.validate(file, FileTypeEnum.IMAGE);
+        Path destinationFile = profilePictureRootLocation
+                .resolve(filename)
+                .normalize()
+                .toAbsolutePath();
 
-            if (!destinationFile.getParent().equals(this.profilePictureRootLocation.toAbsolutePath())) {
-                throw new RuntimeException("Cannot store the file outside current directory.");
-            }
-
-            try (InputStream inputStream = file.getInputStream()) {
-                Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to store the file.", e);
+        if (!destinationFile.getParent().equals(profilePictureRootLocation.toAbsolutePath())) {
+            throw new RuntimeException("Cannot store the file outside current directory.");
         }
+
+        BufferedImage image = imageProcessingService.decode(file);
+        imageProcessingService.encodeWebp(image, destinationFile);
     }
 
     public Resource loadProfilePicture(String filename) {
@@ -82,7 +82,7 @@ public class ProfilePictureStorageService {
         if (filename == null || filename.isBlank()) {
             return;
         }
-        
+
         try {
             Path filePath = this.profilePictureRootLocation.resolve(filename).normalize();
             if (Files.exists(filePath) && filePath.startsWith(this.profilePictureRootLocation)) {
