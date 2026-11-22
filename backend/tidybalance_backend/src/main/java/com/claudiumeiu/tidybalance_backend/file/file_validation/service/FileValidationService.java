@@ -5,9 +5,6 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.Set;
 
-import javax.imageio.ImageIO;
-
-import java.awt.image.BufferedImage;
 import org.apache.tika.Tika;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;

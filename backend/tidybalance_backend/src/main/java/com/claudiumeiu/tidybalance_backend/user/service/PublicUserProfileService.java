@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.claudiumeiu.tidybalance_backend.file.file_storage.service.ProfilePictureStorageService;
-import com.claudiumeiu.tidybalance_backend.file.file_validation.service.FileValidationService;
 import com.claudiumeiu.tidybalance_backend.user.dto.PublicUserProfileDto;
 import com.claudiumeiu.tidybalance_backend.user.dto.PublicUserProfileSearchResultDto;
 import com.claudiumeiu.tidybalance_backend.user.entity.UserEntity;
@@ -21,15 +20,12 @@ public class PublicUserProfileService {
     private final UserAuthService userAuthService;
     private final UserRepository userRepository;
     private final ProfilePictureStorageService profilePictureStorageService;
-    private final FileValidationService fileValidationService;
 
     public PublicUserProfileService(UserRepository userRepository,
-            ProfilePictureStorageService profilePictureStorageService, UserAuthService userAuthService,
-            FileValidationService fileValidationService) {
+            ProfilePictureStorageService profilePictureStorageService, UserAuthService userAuthService) {
         this.userRepository = userRepository;
         this.profilePictureStorageService = profilePictureStorageService;
         this.userAuthService = userAuthService;
-        this.fileValidationService = fileValidationService;
     }
 
     public PublicUserProfileDto getPublicUserProfile(UUID publicUserId) {
