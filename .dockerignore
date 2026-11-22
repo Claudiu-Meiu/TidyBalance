@@ -3,7 +3,8 @@
 
 .env
 .env.*
-!.env.example
+!.env.dev
+!.env.prod.template
 
 **/target
 **/node_modules
