@@ -4,12 +4,11 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.core.io.Resource;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.claudiumeiu.tidybalance_backend.file_storage.service.ProfilePictureStorageService;
+import com.claudiumeiu.tidybalance_backend.file.file_storage.service.ProfilePictureStorageService;
+import com.claudiumeiu.tidybalance_backend.file.file_validation.service.FileValidationService;
 import com.claudiumeiu.tidybalance_backend.user.dto.PublicUserProfileDto;
 import com.claudiumeiu.tidybalance_backend.user.dto.PublicUserProfileSearchResultDto;
 import com.claudiumeiu.tidybalance_backend.user.entity.UserEntity;
@@ -22,12 +21,15 @@ public class PublicUserProfileService {
     private final UserAuthService userAuthService;
     private final UserRepository userRepository;
     private final ProfilePictureStorageService profilePictureStorageService;
+    private final FileValidationService fileValidationService;
 
     public PublicUserProfileService(UserRepository userRepository,
-            ProfilePictureStorageService profilePictureStorageService, UserAuthService userAuthService) {
+            ProfilePictureStorageService profilePictureStorageService, UserAuthService userAuthService,
+            FileValidationService fileValidationService) {
         this.userRepository = userRepository;
         this.profilePictureStorageService = profilePictureStorageService;
         this.userAuthService = userAuthService;
+        this.fileValidationService = fileValidationService;
     }
 
     public PublicUserProfileDto getPublicUserProfile(UUID publicUserId) {
@@ -64,33 +66,22 @@ public class PublicUserProfileService {
     }
 
     public void updateProfilePicture(MultipartFile file) {
-        String username = SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getName();
+        UserEntity user = userAuthService.currentUser();
 
-        UserEntity user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        String extension = fileValidationService.extractNormalizedExtension(file.getOriginalFilename());
 
-        String originalFilename = file.getOriginalFilename();
-        String extension = ".webp";
+        String storedFilename = user.getProfilePicture();
+        String newFilename = user.getPublicUserId() + "." + extension;
 
-        if (originalFilename != null && originalFilename.contains(".")) {
-            extension = originalFilename
-                    .substring(originalFilename.lastIndexOf(".")).toLowerCase();
+        if (storedFilename != null
+                && !storedFilename.isBlank()
+                && !storedFilename.equals(newFilename)) {
+            profilePictureStorageService.deleteProfilePicture(storedFilename);
         }
 
-        String currentlySavedFilename = user.getProfilePicture();
-        String filenameToUpload = user.getPublicUserId().toString() + extension;
+        profilePictureStorageService.storeProfilePicture(file, newFilename);
 
-        if (currentlySavedFilename != null
-                && !currentlySavedFilename.isBlank()
-                && !currentlySavedFilename.equals(filenameToUpload)) {
-            profilePictureStorageService.deleteProfilePicture(currentlySavedFilename);
-        }
-
-        profilePictureStorageService.storeProfilePicture(file, filenameToUpload);
-
-        user.setProfilePicture(filenameToUpload);
+        user.setProfilePicture(newFilename);
         userRepository.saveAndFlush(user);
     }
 
