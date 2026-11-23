@@ -56,6 +56,7 @@ public class ProfilePictureStorageService {
             throw new RuntimeException("Cannot store the file outside current directory.");
         }
 
+        imageProcessingService.validateDimensions(file);
         BufferedImage image = imageProcessingService.decode(file);
         imageProcessingService.encodeWebp(image, destinationFile);
     }
