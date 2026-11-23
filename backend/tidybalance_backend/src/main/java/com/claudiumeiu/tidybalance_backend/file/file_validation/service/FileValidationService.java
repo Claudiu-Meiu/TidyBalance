@@ -15,6 +15,7 @@ import com.claudiumeiu.tidybalance_backend.file.file_validation.model.FileTypeEn
 @Service
 public class FileValidationService {
 
+    private static final long MAX_IMAGE_FILE_SIZE = 1_048_576L;
     private static final Set<String> IMAGE_EXTENSIONS = Set.of("jpg", "jpeg", "png", "webp");
     private static final Set<String> IMAGE_MIME_TYPES = Set.of("image/jpeg", "image/png", "image/webp");
 
@@ -27,6 +28,7 @@ public class FileValidationService {
 
         String filename = file.getOriginalFilename();
 
+        validateFileSize(file, fileTypeEnum);
         validateFilename(filename, fileTypeEnum);
         validateFileContent(file, filename, fileTypeEnum);
     }
@@ -39,6 +41,40 @@ public class FileValidationService {
         }
 
         return extension.toLowerCase(Locale.ROOT);
+    }
+
+    private void validateFileSize(MultipartFile file, FileTypeEnum fileTypeEnum) {
+        switch (fileTypeEnum) {
+            case IMAGE:
+                if (file.getSize() > MAX_IMAGE_FILE_SIZE) {
+                    throw new IllegalArgumentException("Image size is too big");
+                }
+                break;
+        }
+    }
+
+    private void validateFilename(String filename, FileTypeEnum fileTypeEnum) {
+        if (filename == null || filename.isBlank()) {
+            throw new IllegalArgumentException("Invalid filename");
+        }
+
+        if (filename.indexOf('\0') >= 0) {
+            throw new IllegalArgumentException("Null byte detected");
+        }
+
+        if (filename.contains(":")) {
+            throw new IllegalArgumentException("Colon not allowed");
+        }
+
+        Set<String> allowedExtensions = switch (fileTypeEnum) {
+            case IMAGE -> IMAGE_EXTENSIONS;
+        };
+
+        String extension = extractNormalizedExtension(filename);
+
+        if (!allowedExtensions.contains(extension)) {
+            throw new IllegalArgumentException("Extension not allowed");
+        }
     }
 
     private void validateFileContent(MultipartFile file, String filename, FileTypeEnum fileTypeEnum) {
@@ -70,30 +106,6 @@ public class FileValidationService {
 
         if (!extensionMatchesMimeType) {
             throw new IllegalArgumentException("File extension does not match MIME type");
-        }
-    }
-
-    private void validateFilename(String filename, FileTypeEnum fileTypeEnum) {
-        if (filename == null || filename.isBlank()) {
-            throw new IllegalArgumentException("Invalid filename");
-        }
-
-        if (filename.indexOf('\0') >= 0) {
-            throw new IllegalArgumentException("Null byte detected");
-        }
-
-        if (filename.contains(":")) {
-            throw new IllegalArgumentException("Colon not allowed");
-        }
-
-        Set<String> allowedExtensions = switch (fileTypeEnum) {
-            case IMAGE -> IMAGE_EXTENSIONS;
-        };
-
-        String extension = extractNormalizedExtension(filename);
-
-        if (!allowedExtensions.contains(extension)) {
-            throw new IllegalArgumentException("Extension not allowed");
         }
     }
 }
