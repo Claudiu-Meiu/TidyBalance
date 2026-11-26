@@ -1,4 +1,3 @@
-
 package com.claudiumeiu.tidybalance_backend;
 
 import org.springframework.http.HttpStatus;
