@@ -16,80 +16,80 @@ import com.claudiumeiu.tidybalance_backend.user.exception.UsernameAlreadyExistsE
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-        @ExceptionHandler(IncorrectPasswordException.class)
-        public ProblemDetail handleIncorrectPassword(IncorrectPasswordException exception) {
+        private static ProblemDetail unauthorized(RuntimeException exception, String code) {
                 ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED,
                                 exception.getMessage());
 
                 problem.setTitle("Unauthorized");
-                problem.setProperty("code", "INCORRECT_PASSWORD");
+                problem.setProperty("code", code);
 
                 return problem;
         }
 
-        @ExceptionHandler(NewPasswordMustBeDifferentException.class)
-        public ProblemDetail handleNewPasswordMustBeDifferent(
-                        NewPasswordMustBeDifferentException exception) {
-                ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
-                                exception.getMessage());
-
-                problem.setTitle("Bad Request");
-                problem.setProperty("code", "NEW_PASSWORD_MUST_BE_DIFFERENT");
-
-                return problem;
-        }
-
-        @ExceptionHandler(RetypedNewPasswordDoesntMatchException.class)
-        public ProblemDetail handleNewPasswordsDontMatch(
-                        RetypedNewPasswordDoesntMatchException exception) {
-                ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
-                                exception.getMessage());
-
-                problem.setTitle("Bad Request");
-                problem.setProperty("code", "RETYPED_NEW_PASSWORD_DOESNT_MATCH");
-
-                return problem;
-        }
-
-        @ExceptionHandler(NicknameAlreadyExistsException.class)
-        public ProblemDetail handleNicknameAlreadyExists(
-                        NicknameAlreadyExistsException exception) {
-
-                ProblemDetail problem = ProblemDetail.forStatusAndDetail(
-                                HttpStatus.CONFLICT,
-                                exception.getMessage());
-
-                problem.setTitle("Conflict");
-                problem.setProperty("code", "NICKNAME_TAKEN");
-
-                return problem;
-        }
-
-        @ExceptionHandler(UsernameAlreadyExistsException.class)
-        public ProblemDetail handleUsernameAlreadyExists(
-                        UsernameAlreadyExistsException exception) {
-
-                ProblemDetail problem = ProblemDetail.forStatusAndDetail(
-                                HttpStatus.CONFLICT,
-                                exception.getMessage());
-
-                problem.setTitle("Conflict");
-                problem.setProperty("code", "USERNAME_TAKEN");
-
-                return problem;
-        }
-
-        @ExceptionHandler(PublicUserProfileNotFoundException.class)
-        public ProblemDetail handlePublicUserProfileNotFound(
-                        PublicUserProfileNotFoundException exception) {
-
+        private static ProblemDetail notFound(RuntimeException exception, String code) {
                 ProblemDetail problem = ProblemDetail.forStatusAndDetail(
                                 HttpStatus.NOT_FOUND,
                                 exception.getMessage());
 
                 problem.setTitle("Not found");
-                problem.setProperty("code", "USER_ID_NOT_FOUND");
+                problem.setProperty("code", code);
 
                 return problem;
+        }
+
+        private static ProblemDetail badRequest(RuntimeException exception, String code) {
+                ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
+                                exception.getMessage());
+
+                problem.setTitle("Bad Request");
+                problem.setProperty("code", code);
+
+                return problem;
+        }
+
+        private static ProblemDetail conflict(RuntimeException exception, String code) {
+                ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                                HttpStatus.CONFLICT,
+                                exception.getMessage());
+
+                problem.setTitle("Conflict");
+                problem.setProperty("code", code);
+
+                return problem;
+        }
+
+        @ExceptionHandler(IncorrectPasswordException.class)
+        public ProblemDetail handleIncorrectPassword(IncorrectPasswordException exception) {
+                return unauthorized(exception, "INCORRECT_PASSWORD");
+        }
+
+        @ExceptionHandler(NewPasswordMustBeDifferentException.class)
+        public ProblemDetail handleNewPasswordMustBeDifferent(
+                        NewPasswordMustBeDifferentException exception) {
+                return badRequest(exception, "NEW_PASSWORD_MUST_BE_DIFFERENT");
+        }
+
+        @ExceptionHandler(RetypedNewPasswordDoesntMatchException.class)
+        public ProblemDetail handleRetypedNewPasswordDoesntMatch(
+                        RetypedNewPasswordDoesntMatchException exception) {
+                return badRequest(exception, "RETYPED_NEW_PASSWORD_DOESNT_MATCH");
+        }
+
+        @ExceptionHandler(NicknameAlreadyExistsException.class)
+        public ProblemDetail handleNicknameAlreadyExists(
+                        NicknameAlreadyExistsException exception) {
+                return conflict(exception, "NICKNAME_TAKEN");
+        }
+
+        @ExceptionHandler(UsernameAlreadyExistsException.class)
+        public ProblemDetail handleUsernameAlreadyExists(
+                        UsernameAlreadyExistsException exception) {
+                return conflict(exception, "USERNAME_TAKEN");
+        }
+
+        @ExceptionHandler(PublicUserProfileNotFoundException.class)
+        public ProblemDetail handlePublicUserProfileNotFound(
+                        PublicUserProfileNotFoundException exception) {
+                return notFound(exception, "USER_ID_NOT_FOUND");
         }
 }
